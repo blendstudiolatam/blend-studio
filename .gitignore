@@ -34,6 +34,10 @@ yarn-error.log*
 .env*
 !.env.example
 
+# supabase (archivos temporales del CLI)
+/supabase/.temp
+/supabase/.branches
+
 # vercel
 .vercel
 

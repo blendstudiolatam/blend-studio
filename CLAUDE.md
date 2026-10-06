@@ -42,6 +42,14 @@
 - Ley 81 de 2019 de Panamá (datos personales): consentimiento en el formulario de reservas, política de privacidad publicada, pedir solo los datos necesarios.
 - Revisar dependencias con `npm audit` antes de cada publicación.
 
+## Convenciones de base de datos
+- Migraciones en `supabase/migrations/`; se aplican con `npm run db:push` (usa `SUPABASE_DB_URL` de `.env.local`).
+- Cada tabla nueva: `revoke all ... from anon, authenticated`, luego `grant` solo lo necesario (por columna si aplica), `enable row level security` y políticas usando las funciones de `privado` (`tiene_acceso`, `tiene_rol`, `es_admin`, `es_dueno`).
+- Tablas con citas, ventas o caja: trigger `privado.registrar_auditoria()`.
+- Toda tabla nueva con pruebas de permisos en `tests/rls/` (`npm run test:rls`). Las pruebas corren en transacciones que se deshacen.
+- El dueño (`perfiles.es_dueno`) es admin en todas las sucursales; solo se activa por SQL.
+- Sin Docker: el proyecto Supabase actual es de **desarrollo**. Para producción se creará un proyecto aparte.
+
 ## Fases
 - **Fase 1:** base del proyecto (auth, roles, sucursales, ajustes del negocio y de marca), servicios y categorías (duración, precio), empleados (horarios, servicios que realizan, % de comisión), clientes (ficha, historial, notas, cumpleaños), agenda (día/semana, por estilista, estados de cita), reservas web públicas 24/7 con confirmación en pantalla, comisiones por servicio realizado, PWA instalable.
 - **Fase 2:** punto de venta, caja (apertura, cierre, cuadre), productos e inventario con alertas de stock, métodos de pago (efectivo, Yappy, Tilopay, datáfono registrado a mano), factura electrónica vía PAC, ITBMS.
