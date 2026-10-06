@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+/*
+  Marca provisional de Blend Studio (hasta recibir el manual de identidad).
+  En la sesión de Ajustes estos valores se podrán sobrescribir desde la base de datos.
+*/
+:root {
+  --brand-ink: #0b0b0b;
+  --brand-ivory: #f6f1e9;
+  --brand-gold: #c9a15b;
+  --brand-gold-strong: #a9823f;
+
+  --background: var(--brand-ivory);
+  --foreground: #1b1a18;
+  --surface: #ffffff;
+  --muted: #6f6a62;
+  --line: #e4dccf;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-ink: var(--brand-ink);
+  --color-ivory: var(--brand-ivory);
+  --color-gold: var(--brand-gold);
+  --color-gold-strong: var(--brand-gold-strong);
+  --font-sans: var(--font-jost);
+  --font-display: var(--font-bodoni);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
