@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:push": "node --env-file-if-exists=.env.local scripts/db-push.mjs",
+    "db:types": "node --env-file-if-exists=.env.local scripts/db-types.mjs",
     "test:rls": "node --env-file-if-exists=.env.local --test \"tests/rls/*.test.ts\""
   },
   "dependencies": {

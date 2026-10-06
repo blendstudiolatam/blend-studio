@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Wordmark } from "@/components/brand/wordmark";
 import { checkSupabase, type SupabaseStatus } from "@/lib/supabase/health";
 
@@ -11,24 +12,31 @@ const statusText: Record<SupabaseStatus, { label: string; color: string }> = {
 };
 
 export default async function Home() {
-  const status = statusText[await checkSupabase()];
+  // El indicador técnico solo se muestra en desarrollo, nunca al público.
+  const status =
+    process.env.NODE_ENV === "development" ? statusText[await checkSupabase()] : null;
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center bg-ink px-6 py-16 text-ivory">
       <Wordmark className="text-[15px] sm:text-[18px]" />
 
       <p className="mt-12 max-w-sm text-center text-sm text-ivory/70">
-        Estamos preparando el sistema de gestión y reservas del salón.
+        Muy pronto podrás reservar tu cita en línea.
       </p>
 
-      <div className="mt-8 flex items-center gap-2 rounded-full border border-ivory/15 px-4 py-2 text-xs tracking-wide">
-        <span className={`h-2 w-2 rounded-full ${status.color}`} />
-        {status.label}
-      </div>
+      <Link
+        href="/entrar"
+        className="mt-8 rounded-full border border-gold px-8 py-3 text-xs uppercase tracking-[0.25em] text-gold transition hover:bg-gold hover:text-ink"
+      >
+        Entrar al sistema
+      </Link>
 
-      <p className="mt-16 text-[11px] uppercase tracking-[0.3em] text-gold">
-        Fase 1 · En construcción
-      </p>
+      {status && (
+        <div className="mt-10 flex items-center gap-2 rounded-full border border-ivory/15 px-4 py-2 text-xs tracking-wide">
+          <span className={`h-2 w-2 rounded-full ${status.color}`} />
+          {status.label}
+        </div>
+      )}
     </main>
   );
 }

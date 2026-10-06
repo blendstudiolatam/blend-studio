@@ -3,6 +3,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getPublicEnv } from "@/lib/env";
 import { buildCsp } from "@/lib/security/csp";
 
+const RUTAS_PRIVADAS = ["/panel", "/seleccionar-sucursal"];
+
 /**
  * Corre antes de cada página:
  * 1. Genera un "nonce" (código de un solo uso) y aplica la CSP.
@@ -48,7 +50,18 @@ export async function proxy(request: NextRequest) {
       },
     );
     // No poner código entre createServerClient y getClaims: renueva la sesión.
-    await supabase.auth.getClaims();
+    const { data } = await supabase.auth.getClaims();
+
+    // Atajo de comodidad: sin sesión, el panel manda directo a "Entrar".
+    // (La protección real está en el servidor: requirePanel() y RLS.)
+    const { pathname } = request.nextUrl;
+    const privada = RUTAS_PRIVADAS.some((r) => pathname === r || pathname.startsWith(`${r}/`));
+    if (privada && !data?.claims) {
+      const redirigir = NextResponse.redirect(new URL("/entrar", request.url));
+      response.cookies.getAll().forEach((c) => redirigir.cookies.set(c));
+      redirigir.headers.set("Content-Security-Policy", csp);
+      return redirigir;
+    }
   }
 
   response.headers.set("Content-Security-Policy", csp);

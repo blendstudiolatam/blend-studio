@@ -1,17 +1,10 @@
 // Aplica las migraciones de supabase/migrations a la base de datos de SUPABASE_DB_URL.
 // Uso: npm run db:push            (aplica)
 //      npm run db:push -- --dry-run (solo muestra qué aplicaría)
-import { spawnSync } from "node:child_process";
+import { requireDbUrl, supabase } from "./supabase-cli.mjs";
 
-const url = process.env.SUPABASE_DB_URL;
-if (!url) {
-  console.error("Falta SUPABASE_DB_URL en .env.local (ver .env.example).");
-  process.exit(1);
-}
-
-const extra = process.argv.slice(2);
-const result = spawnSync("npx", ["supabase", "db", "push", "--db-url", url, ...extra], {
+const url = requireDbUrl();
+const result = supabase(["db", "push", "--db-url", url, ...process.argv.slice(2)], {
   stdio: "inherit",
-  shell: process.platform === "win32",
 });
 process.exit(result.status ?? 1);

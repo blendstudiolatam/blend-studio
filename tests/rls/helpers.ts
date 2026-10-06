@@ -17,8 +17,13 @@ export type Db = {
   ) => Promise<pg.QueryResult<T>>;
   /** Ejecuta SQL y devuelve el mensaje de error, o null si no falló. */
   error: (sql: string, params?: unknown[]) => Promise<string | null>;
-  /** Simula a un usuario con sesión iniciada. */
-  as: (userId: string) => Promise<void>;
+  /**
+   * Simula a un usuario con sesión iniciada. Por defecto con verificación en
+   * dos pasos completada (aal2); usa "aal1" para simular solo contraseña.
+   */
+  as: (userId: string, aal?: "aal1" | "aal2") => Promise<void>;
+  /** Simula al servidor usando la clave secreta (service_role). */
+  asService: () => Promise<void>;
   /** Simula a un visitante sin sesión. */
   asAnon: () => Promise<void>;
   /** Vuelve al rol administrador de la base de datos (para preparar datos). */
@@ -47,12 +52,19 @@ export async function withTx(fn: (db: Db) => Promise<void>): Promise<void> {
         return (e as Error).message;
       }
     },
-    as: async (userId) => {
+    as: async (userId, aal = "aal2") => {
       await client.query("reset role");
       await client.query("select set_config('request.jwt.claims', $1, true)", [
-        JSON.stringify({ sub: userId, role: "authenticated" }),
+        JSON.stringify({ sub: userId, role: "authenticated", aal }),
       ]);
       await client.query("set local role authenticated");
+    },
+    asService: async () => {
+      await client.query("reset role");
+      await client.query("select set_config('request.jwt.claims', $1, true)", [
+        JSON.stringify({ role: "service_role" }),
+      ]);
+      await client.query("set local role service_role");
     },
     asAnon: async () => {
       await client.query("reset role");
