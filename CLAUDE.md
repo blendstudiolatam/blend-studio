@@ -28,6 +28,11 @@
 - Las reservas web entran con estado **pendiente**; recepción las confirma.
 - Nombre del salón: **Blend Studio** ("Beauty for everyone", Est. 2026). Marca provisional mientras llega el manual: negro, marfil y dorado; serif condensada de alto contraste para títulos y sans geométrica espaciada en mayúsculas para subtítulos. Logo provisional en `public/brand/`.
 
+## Decisiones del anexo v2 (aprobadas por Julio, 2026-10-07)
+- Matriz de permisos por módulo configurable (Acceso total / Solo lectura / Sin acceso), pero con **límites fijos que no se pueden abrir**: Caja y Finanzas solo admin; el profesional (estilista) ve solo su agenda y sus comisiones.
+- Historial médico del cliente: lo ven admin y recepción; cada profesional solo el de sus clientes con cita; registro de quién lo consulta.
+- Datos de prueba: al menos 20 clientes ficticios (hombres y mujeres) y 8 empleados que cubran todos los roles, con tratamientos, sesiones agendadas, documentos y fotos de antes/después y de avance. Solo en el proyecto de desarrollo, nunca en producción.
+
 ## Seguridad (obligatoria, no opcional)
 - RLS activado en todas las tablas, con políticas por sucursal y por rol. Ninguna tabla sin política.
 - Roles: dueño/admin, recepción, estilista. El estilista ve solo su agenda y sus comisiones; finanzas y caja solo admin.
