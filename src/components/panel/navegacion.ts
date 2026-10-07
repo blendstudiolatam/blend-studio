@@ -13,7 +13,7 @@ import {
   Wallet,
   type LucideIcon,
 } from "lucide-react";
-import type { ModuloApp, Permisos } from "@/lib/auth/permisos";
+import type { ModuloApp, Permisos, Rol } from "@/lib/auth/permisos";
 
 /**
  * Menú del panel (anexo v2 de CLAUDE.md). Un solo lugar define nombres, rutas,
@@ -25,6 +25,8 @@ export type SubModulo = {
   slug: string;
   fase: 1 | 2 | 3;
   listo?: boolean;
+  /** Visible solo para administradores (p. ej. gestión de usuarios). */
+  soloAdmin?: boolean;
 };
 
 export type Modulo = {
@@ -94,7 +96,7 @@ export const MODULOS: Modulo[] = [
     permiso: "personal",
     hijos: [
       { nombre: "Empleados", slug: "empleados", fase: 1 },
-      { nombre: "Usuarios", slug: "usuarios", fase: 1 },
+      { nombre: "Usuarios", slug: "usuarios", fase: 1, listo: true, soloAdmin: true },
       { nombre: "Servicios del personal", slug: "servicios", fase: 2 },
     ],
   },
@@ -187,8 +189,11 @@ export const rutaDe = (modulo: Modulo, hijo?: SubModulo) =>
 export const puedeVerModulo = (m: Modulo, permisos: Permisos) =>
   m.permiso === null || permisos[m.permiso] !== "ninguno";
 
-export function modulosVisibles(permisos: Permisos): Modulo[] {
-  return MODULOS.filter((m) => puedeVerModulo(m, permisos));
+export function modulosVisibles(permisos: Permisos, rol: Rol): Modulo[] {
+  return MODULOS.filter((m) => puedeVerModulo(m, permisos)).map((m) => ({
+    ...m,
+    hijos: m.hijos?.filter((h) => !h.soloAdmin || rol === "admin"),
+  }));
 }
 
 /** Encuentra el módulo (y submódulo) que corresponde a una ruta del panel. */

@@ -6,11 +6,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { cerrarSesion } from "@/app/entrar/actions";
-import type { Permisos } from "@/lib/auth/permisos";
+import type { Permisos, Rol } from "@/lib/auth/permisos";
 import { buscarRuta, modulosVisibles, rutaDe, type Modulo } from "./navegacion";
 
 type Props = {
   permisos: Permisos;
+  rol: Rol;
   etiquetaRol: string;
   sucursal: string;
   variasSucursales: boolean;
@@ -92,8 +93,8 @@ function Marca({ compacta = false }: { compacta?: boolean }) {
   );
 }
 
-function Contenido({ permisos, etiquetaRol, sucursal, variasSucursales, pathname }: Props & { pathname: string }) {
-  const modulos = modulosVisibles(permisos);
+function Contenido({ permisos, rol, etiquetaRol, sucursal, variasSucursales, pathname }: Props & { pathname: string }) {
+  const modulos = modulosVisibles(permisos, rol);
   const activo = buscarRuta(pathname);
 
   return (

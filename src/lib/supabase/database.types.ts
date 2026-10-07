@@ -53,14 +53,14 @@ isOneToOne: false
                   ]
                 },"perfiles": {
                   Row: {
-                    "created_at": string,"es_dueno": boolean,"id": string,"nombre_completo": string,"telefono": string | null,"updated_at": string
+                    "created_at": string,"email": string | null,"es_dueno": boolean,"id": string,"nombre_completo": string,"telefono": string | null,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"es_dueno"?: boolean,"id": string,"nombre_completo"?: string,"telefono"?: string | null,"updated_at"?: string
+                    "created_at"?: string,"email"?: string | null,"es_dueno"?: boolean,"id": string,"nombre_completo"?: string,"telefono"?: string | null,"updated_at"?: string
                   }
                   Update: {
-                    "created_at"?: string,"es_dueno"?: boolean,"id"?: string,"nombre_completo"?: string,"telefono"?: string | null,"updated_at"?: string
+                    "created_at"?: string,"email"?: string | null,"es_dueno"?: boolean,"id"?: string,"nombre_completo"?: string,"telefono"?: string | null,"updated_at"?: string
                   }
                   Relationships: [
                     

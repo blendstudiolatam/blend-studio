@@ -11,6 +11,7 @@ export default async function PanelLayout({ children }: LayoutProps<"/panel">) {
     <div className="flex min-h-dvh flex-1 flex-col lg:pl-64">
       <MenuLateral
         permisos={ctx.permisos}
+        rol={ctx.rol}
         etiquetaRol={ctx.esDueno ? "Propietario" : ETIQUETA_ROL[ctx.rol]}
         sucursal={ctx.sucursal.nombre}
         variasSucursales={ctx.sucursales.length > 1}

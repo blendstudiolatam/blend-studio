@@ -58,6 +58,8 @@
 - Tablas con citas, ventas o caja: trigger `privado.registrar_auditoria()`.
 - Toda tabla nueva con pruebas de permisos en `tests/rls/` (`npm run test:rls`). Las pruebas corren en transacciones que se deshacen.
 - El dueño (`perfiles.es_dueno`) es admin en todas las sucursales; solo se activa por SQL.
+- Invitaciones sin correo: el admin genera un enlace (`generateLink` con la clave secreta) y lo envía por WhatsApp; vence en 1 hora. `/auth/confirmar` usa el enlace solo al pulsar "Continuar" (las vistas previas de WhatsApp no lo gastan).
+- Usuarios de prueba: `npm run seed:usuarios` (correos `@prueba.blendstudio.test`, contraseñas en `supabase/seed-demo/credenciales-prueba.local.txt`, ignorado por Git).
 - Sin Docker: el proyecto Supabase actual es de **desarrollo**. Para producción se creará un proyecto aparte.
 
 ## Fases
@@ -170,7 +172,7 @@ Marca cada punto cuando esté terminado y probado.
 - [ ] Indicadores: total, activos, profesionales, en vacaciones; filtros Profesional, Recepción, Asistente
 - [ ] Formulario de empleado: foto, nombre, correo, teléfono, rol (Administrador, Profesional, Recepción, Asistente), especialidad, horario, comisión %, estado (Activo, Vacaciones, Inactivo), "Recibe reservas desde la web", color de etiqueta en la agenda, acceso al sistema sí/no
 - [ ] Botón Rendimiento por empleado
-- [ ] Usuarios: lista con rol y usuario; permisos por módulo (Agenda, Personal, Clientes, Servicios, Productos, Reportes, Configuración, Caja, Ventas, Finanzas) con niveles Acceso total, Solo lectura y Sin acceso; matriz global de permisos por rol
+- [x] (sesiones 4 y 5) Usuarios: lista con rol y usuario; permisos por módulo (Agenda, Personal, Clientes, Servicios, Productos, Reportes, Configuración, Caja, Ventas, Finanzas) con niveles Acceso total, Solo lectura y Sin acceso; matriz global de permisos por rol
 - [ ] Servicios del personal (Fase 2): registros enviados por los empleados desde su app; estados Pendiente, Validado, Rechazado; filtros Hoy, Semana, Quincena, Mes y Personalizado; columnas fecha, profesional, cliente, servicios, productos, pago, total, comisión, ajuste (+), descuento (−) y validar; al validar se actualizan inventario, caja y comisiones; resumen por profesional con comisión liquidada
 - [ ] App del trabajador (Fase 2, vista móvil instalable): resumen del día (ventas, citas, pendientes, comisión) y asistente "Registrar nueva venta" paso a paso: cliente, servicios, productos, pago, resumen con su comisión; queda pendiente de validación
 - [ ] Top empleado del mes (Fase 3)

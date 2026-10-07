@@ -5,13 +5,14 @@ import { requirePanel } from "@/lib/auth/sesion";
 
 /** Página provisional de los módulos que todavía no están construidos. */
 export default async function ModuloPendientePage({ params }: PageProps<"/panel/[...ruta]">) {
-  const { permisos } = await requirePanel();
+  const { permisos, rol } = await requirePanel();
   const { ruta } = await params;
   const { modulo, hijo } = buscarRuta(`/panel/${ruta.join("/")}`);
 
   // Ruta inexistente o módulo sin permiso para este usuario.
   if (!modulo || !puedeVerModulo(modulo, permisos) || ruta.length > 2) notFound();
   if (ruta.length === 2 && !hijo) notFound();
+  if (hijo?.soloAdmin && rol !== "admin") notFound();
 
   const fase = hijo?.fase ?? modulo.fase;
 

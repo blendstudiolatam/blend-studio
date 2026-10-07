@@ -151,6 +151,46 @@ export async function confirmarQr(
   redirect("/panel");
 }
 
+const contrasenaSchema = z
+  .object({
+    password: z
+      .string()
+      .min(10, { error: "La contraseña debe tener al menos 10 caracteres." })
+      .max(200),
+    confirmacion: z.string(),
+  })
+  .refine((d) => d.password === d.confirmacion, { error: "Las contraseñas no coinciden." });
+
+/** Crear o cambiar la contraseña (después de abrir un enlace de invitación o de acceso). */
+export async function guardarContrasena(
+  _prev: EstadoFormulario,
+  formData: FormData,
+): Promise<EstadoFormulario> {
+  const usuario = await getUsuario();
+  if (!usuario) redirect("/entrar");
+
+  const parsed = contrasenaSchema.safeParse({
+    password: formData.get("password"),
+    confirmacion: formData.get("confirmacion"),
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
+  if (error) {
+    // Con verificación en dos pasos activa, Supabase exige el código antes de cambiar la contraseña.
+    if (error.code === "insufficient_aal") redirect("/entrar/verificar");
+    return {
+      error:
+        error.code === "same_password"
+          ? "Usa una contraseña distinta a la anterior."
+          : "No se pudo guardar. Prueba con otra contraseña más segura.",
+    };
+  }
+
+  redirect(await destinoTrasContrasena());
+}
+
 export async function elegirSucursal(formData: FormData) {
   const parsed = z.guid().safeParse(formData.get("sucursalId"));
   const sucursales = await getSucursales();

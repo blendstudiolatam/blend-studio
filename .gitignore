@@ -34,6 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
+# archivos locales privados (p. ej. credenciales de prueba)
+*.local.txt
+
 # supabase (archivos temporales del CLI)
 /supabase/.temp
 /supabase/.branches
