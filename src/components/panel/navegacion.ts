@@ -57,6 +57,7 @@ export const MODULOS: Modulo[] = [
     icono: CalendarDays,
     descripcion: "Citas por día, semana y mes",
     fase: 1,
+    listo: true,
     permiso: "agenda",
   },
   {

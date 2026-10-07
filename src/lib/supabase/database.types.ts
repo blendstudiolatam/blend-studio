@@ -97,6 +97,56 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"citas": {
+                  Row: {
+                    "cliente_id": string,"creado_por": string | null,"created_at": string,"empleado_id": string,"estado": Database["public"]['Enums']["estado_cita"],"fin": string,"id": string,"inicio": string,"motivo_cancelacion": string | null,"notas": string | null,"origen": string,"precio": number | null,"servicio_id": string | null,"sesion_id": string | null,"sucursal_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cliente_id": string,"creado_por"?: string | null,"created_at"?: string,"empleado_id": string,"estado"?: Database["public"]['Enums']["estado_cita"],"fin": string,"id"?: string,"inicio": string,"motivo_cancelacion"?: string | null,"notas"?: string | null,"origen"?: string,"precio"?: number | null,"servicio_id"?: string | null,"sesion_id"?: string | null,"sucursal_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "cliente_id"?: string,"creado_por"?: string | null,"created_at"?: string,"empleado_id"?: string,"estado"?: Database["public"]['Enums']["estado_cita"],"fin"?: string,"id"?: string,"inicio"?: string,"motivo_cancelacion"?: string | null,"notas"?: string | null,"origen"?: string,"precio"?: number | null,"servicio_id"?: string | null,"sesion_id"?: string | null,"sucursal_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "citas_cliente_id_fkey"
+      columns: ["cliente_id"]
+isOneToOne: false
+      referencedRelation: "clientes"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "citas_creado_por_fkey"
+      columns: ["creado_por"]
+isOneToOne: false
+      referencedRelation: "perfiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "citas_empleado_id_fkey"
+      columns: ["empleado_id"]
+isOneToOne: false
+      referencedRelation: "empleados"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "citas_servicio_id_fkey"
+      columns: ["servicio_id"]
+isOneToOne: false
+      referencedRelation: "servicios"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "citas_sesion_id_fkey"
+      columns: ["sesion_id"]
+isOneToOne: true
+      referencedRelation: "sesiones_tratamiento"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "citas_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"clientes": {
                   Row: {
                     "activo": boolean,"apellido": string,"busqueda": string | null,"codigo": number,"creado_por": string | null,"created_at": string,"direccion": string | null,"documento": string | null,"email": string | null,"fecha_nacimiento": string | null,"foto_path": string | null,"genero": string | null,"id": string,"nombre": string,"notas": string | null,"origen": string,"permitir_fotos": boolean,"recordatorios_whatsapp": boolean,"sucursal_origen_id": string | null,"telefono": string | null,"telefono_digitos": string | null,"updated_at": string
@@ -119,6 +169,26 @@ isOneToOne: false
       foreignKeyName: "clientes_sucursal_origen_id_fkey"
       columns: ["sucursal_origen_id"]
 isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"config_recordatorios": {
+                  Row: {
+                    "activo": boolean,"aviso_horas": number,"por_correo": boolean,"por_whatsapp": boolean,"seguimiento_activo": boolean,"seguimiento_horas": number,"sucursal_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "activo"?: boolean,"aviso_horas"?: number,"por_correo"?: boolean,"por_whatsapp"?: boolean,"seguimiento_activo"?: boolean,"seguimiento_horas"?: number,"sucursal_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "activo"?: boolean,"aviso_horas"?: number,"por_correo"?: boolean,"por_whatsapp"?: boolean,"seguimiento_activo"?: boolean,"seguimiento_horas"?: number,"sucursal_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "config_recordatorios_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: true
       referencedRelation: "sucursales"
       referencedColumns: ["id"]
     }
@@ -600,7 +670,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "categoria_documento": "consentimiento"|"estudio"|"antes_despues"|"receta"|"identificacion"|"otro","estado_empleado": "activo"|"vacaciones"|"inactivo","estado_plan": "activo"|"pausado"|"completado"|"cancelado","estado_sesion": "pendiente"|"completada"|"cancelada","modulo_app": "agenda"|"clientes"|"servicios"|"personal"|"productos"|"ventas"|"caja"|"finanzas"|"reportes"|"configuracion","nivel_permiso": "ninguno"|"lectura"|"total","rol_usuario": "admin"|"recepcion"|"estilista"|"asistente"
+            "categoria_documento": "consentimiento"|"estudio"|"antes_despues"|"receta"|"identificacion"|"otro","estado_cita": "pendiente"|"confirmada"|"completada"|"cancelada"|"no_asistio","estado_empleado": "activo"|"vacaciones"|"inactivo","estado_plan": "activo"|"pausado"|"completado"|"cancelado","estado_sesion": "pendiente"|"completada"|"cancelada","modulo_app": "agenda"|"clientes"|"servicios"|"personal"|"productos"|"ventas"|"caja"|"finanzas"|"reportes"|"configuracion","nivel_permiso": "ninguno"|"lectura"|"total","rol_usuario": "admin"|"recepcion"|"estilista"|"asistente"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -716,7 +786,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "categoria_documento": ["consentimiento", "estudio", "antes_despues", "receta", "identificacion", "otro"],"estado_empleado": ["activo", "vacaciones", "inactivo"],"estado_plan": ["activo", "pausado", "completado", "cancelado"],"estado_sesion": ["pendiente", "completada", "cancelada"],"modulo_app": ["agenda", "clientes", "servicios", "personal", "productos", "ventas", "caja", "finanzas", "reportes", "configuracion"],"nivel_permiso": ["ninguno", "lectura", "total"],"rol_usuario": ["admin", "recepcion", "estilista", "asistente"]
+            "categoria_documento": ["consentimiento", "estudio", "antes_despues", "receta", "identificacion", "otro"],"estado_cita": ["pendiente", "confirmada", "completada", "cancelada", "no_asistio"],"estado_empleado": ["activo", "vacaciones", "inactivo"],"estado_plan": ["activo", "pausado", "completado", "cancelado"],"estado_sesion": ["pendiente", "completada", "cancelada"],"modulo_app": ["agenda", "clientes", "servicios", "personal", "productos", "ventas", "caja", "finanzas", "reportes", "configuracion"],"nivel_permiso": ["ninguno", "lectura", "total"],"rol_usuario": ["admin", "recepcion", "estilista", "asistente"]
           }
         }
 } as const

@@ -58,8 +58,9 @@
 - Marca: `negocio` (una fila) + `public.marca_publica()` para datos públicos; `getMarca()` aplica colores y tipografías como variables CSS en `<html>`. Logo en Storage `marca` (público, solo admins escriben; el servidor lo convierte a WebP). Horario por día en `horarios_sucursal`.
 - Empleados (sesión 9): `empleados` (usuario_id opcional, solo lo enlaza el servidor), `horarios_empleado`, `bloqueos_empleado`, `empleado_servicios` (comisión por servicio opcional). Fotos en Storage `equipo` (público). Datos de prueba: `npm run seed:empleados`.
 - Clientes (sesión 10): `clientes` es global (sin `sucursal_id`); RLS con `privado.puede_alguna('clientes', escribir)`; borrar solo admin. Código visible C-0001 (`codigo`), búsqueda con `busqueda`/`telefono_digitos` (columnas generadas). Fotos en Storage `clientes` (PRIVADO, enlaces firmados de 1 hora). Importar/exportar Excel/CSV con `exceljs` (`src/lib/excel.server.ts`; el CSV exportado se protege contra fórmulas). Datos de prueba: `npm run seed:clientes`.
-- Salud del cliente (sesiones 11-12): `historial_medico`, `medicamentos_cliente`, `documentos_cliente` SIN acceso directo (política using false); todo por funciones `public.ver_historial_medico`, `guardar_historial_medico`, `documentos_de_cliente`, `registrar_documento`, `abrir_documento`, `eliminar_documento`, que verifican `privado.puede_ver_salud`/`puede_editar_salud` y escriben en `consultas_salud` (lo ve solo admin). Sin consentimiento no se guardan datos (check en la tabla). Archivos en Storage `documentos` (privado, sin políticas): solo el servidor sube y firma enlaces de 5 minutos tras la autorización. **Pendiente en Agenda:** agregar a `privado.puede_ver_salud` al profesional con cita con el cliente. Datos de prueba: `npm run seed:salud`.
-- Tratamientos (sesión 13): `paquetes` (catálogo por sucursal; precios los gestiona Servicios total), `planes_tratamiento` y `sesiones_tratamiento` (por sucursal; Clientes). Las sesiones las crea el trigger `privado.sincronizar_sesiones` según la frecuencia; el plan pasa solo a completado al terminar. Fotos de avance = `documentos_cliente.plan_id`. Recordatorio manual por enlace de WhatsApp con el mensaje listo. **Pendiente en Agenda:** convertir cada sesión en cita. **Pendiente en Fase 2:** marcar "pagada" desde el POS. Datos de prueba: `npm run seed:tratamientos`.
+- Salud del cliente (sesiones 11-12): `historial_medico`, `medicamentos_cliente`, `documentos_cliente` SIN acceso directo (política using false); todo por funciones `public.ver_historial_medico`, `guardar_historial_medico`, `documentos_de_cliente`, `registrar_documento`, `abrir_documento`, `eliminar_documento`, que verifican `privado.puede_ver_salud`/`puede_editar_salud` y escriben en `consultas_salud` (lo ve solo admin). Sin consentimiento no se guardan datos (check en la tabla). Archivos en Storage `documentos` (privado, sin políticas): solo el servidor sube y firma enlaces de 5 minutos tras la autorización. Datos de prueba: `npm run seed:salud`.
+- Tratamientos (sesión 13): `paquetes` (catálogo por sucursal; precios los gestiona Servicios total), `planes_tratamiento` y `sesiones_tratamiento` (por sucursal; Clientes). Las sesiones las crea el trigger `privado.sincronizar_sesiones` según la frecuencia; el plan pasa solo a completado al terminar. Fotos de avance = `documentos_cliente.plan_id`. Recordatorio manual por enlace de WhatsApp con el mensaje listo. **Pendiente en Fase 2:** marcar "pagada" desde el POS. Datos de prueba: `npm run seed:tratamientos`.
+- Agenda (sesiones 14-16): `citas` (por sucursal; no se borran, se cancelan). Reglas en el trigger `privado.validar_cita` (horario del salón, del profesional, días libres; mensajes en español con errcode P0001) y la restricción `citas_sin_cruce` (btree_gist; 23P01). Hora de Panamá fija UTC-5 (`src/lib/agenda.ts`). El profesional ve y edita solo su agenda (`privado.ve_agenda_de` / `edita_agenda_de`) y ve el historial médico de sus clientes con cita. Una cita con `sesion_id` actualiza su sesión de tratamiento. `config_recordatorios` por sucursal (solo admin; el envío llega en Fase 3). Las reservas web entrarán con `origen = web` por una función del servidor (sesiones 17-18). Datos de prueba: `npm run seed:citas`.
 - Tablas con citas, ventas o caja: trigger `privado.registrar_auditoria()`.
 - Toda tabla nueva con pruebas de permisos en `tests/rls/` (`npm run test:rls`). Las pruebas corren en transacciones que se deshacen.
 - El dueño (`perfiles.es_dueno`) es admin en todas las sucursales; solo se activa por SQL.
@@ -128,14 +129,14 @@ Marca cada punto cuando esté terminado y probado.
 - [x] (selector en Ventas/Caja/Inventario: Fase 2) Sucursales: crear y elegir sucursal activa (selector visible en Ventas, Caja e Inventario)
 
 #### Agenda (Fase 1)
-- [ ] Vistas Día, Semana y Mes, más "Resumen del día"
-- [ ] Columnas por profesional con foto; citas en bloques de color según el empleado o el estado
-- [ ] Indicadores: citas de hoy, de la semana, confirmadas y pendientes
-- [ ] Mini calendario de reservas con días marcados (selección, hoy, reservado)
-- [ ] Pestañas Agenda y Reservas web (solicitudes de la web por confirmar)
-- [ ] Botón "Agendar cita"; estados de cita (pendiente, confirmada, completada, cancelada, no asistió)
-- [ ] Compartir agenda con el equipo: cada profesional ve la suya; admin y recepción ven todas
-- [ ] Panel "Recordatorios automáticos": activo o no, canales (WhatsApp y correo), aviso principal (por ejemplo 1 día antes) y seguimiento (por ejemplo 2 horas antes), configurables
+- [x] Vistas Día, Semana y Mes, más "Resumen del día"
+- [x] Columnas por profesional con foto; citas en bloques de color según el empleado o el estado
+- [x] Indicadores: citas de hoy, de la semana, confirmadas y pendientes
+- [x] Mini calendario de reservas con días marcados (selección, hoy, reservado)
+- [x] Pestañas Agenda y Reservas web (solicitudes de la web por confirmar)
+- [x] Botón "Agendar cita"; estados de cita (pendiente, confirmada, completada, cancelada, no asistió)
+- [x] Compartir agenda con el equipo: cada profesional ve la suya; admin y recepción ven todas
+- [x] (configuración guardada; el envío real llega en Fase 3) Panel "Recordatorios automáticos": activo o no, canales (WhatsApp y correo), aviso principal (por ejemplo 1 día antes) y seguimiento (por ejemplo 2 horas antes), configurables
 
 #### Reservas web públicas (Fase 1)
 - [ ] Página "Reserva tu cita" con la marca del salón
@@ -163,7 +164,7 @@ Marca cada punto cuando esté terminado y probado.
 - [x] Plan de tratamiento por cliente: procedimiento, cantidad de sesiones, fecha de inicio, profesional, estado, frecuencia (por ejemplo cada semana), precio por sesión, total del plan
 - [x] Barra de progreso: sesiones completadas de total
 - [x] Tabla de sesiones: número, procedimiento, fecha, hora, estado (completada o pendiente) y pago (pagada o no pagada)
-- [ ] Las sesiones se crean como citas en la agenda ("Eventos en agenda")
+- [x] Las sesiones se crean como citas en la agenda ("Eventos en agenda")
 - [x] (botón abre WhatsApp con el mensaje listo) Tarjeta "Recordatorio próximo" con la siguiente sesión y botón "Enviar recordatorio" (envío real por WhatsApp en Fase 3)
 - [x] Botones Editar y Eliminar tratamiento; botón "Nuevo plan de tratamiento"
 

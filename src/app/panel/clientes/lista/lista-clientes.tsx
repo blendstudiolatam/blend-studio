@@ -51,6 +51,7 @@ export type FilaCliente = {
   creado: string;
   planesActivos?: number;
   sesionesCompletadas?: number;
+  ultimaVisita?: string | null;
 };
 
 type Filtro = { texto: string; estado: EstadoCliente | "todos"; pagina: number; porPagina: number; encontrados: number };
@@ -343,8 +344,14 @@ function Tabla({ clientes, onAbrir }: { clientes: FilaCliente[]; onAbrir: (c: Fi
                 <p>{c.telefono ?? "—"}</p>
                 {c.email && <p className="max-w-[220px] truncate text-muted">{c.email}</p>}
               </td>
-              {/* Última visita y total gastado se llenan con Agenda y Ventas. */}
-              <td className="px-4 py-3 text-muted">—</td>
+              {/* El total gastado se llena con Ventas (Fase 2). */}
+              <td className="px-4 py-3 text-xs">
+                {c.ultimaVisita ? (
+                  new Date(c.ultimaVisita).toLocaleDateString("es-PA", { timeZone: "America/Panama", day: "numeric", month: "short", year: "numeric" })
+                ) : (
+                  <span className="text-muted">—</span>
+                )}
+              </td>
               <td className="px-4 py-3 text-right">{c.planesActivos || <span className="text-muted">—</span>}</td>
               <td className="px-4 py-3 text-right">{c.sesionesCompletadas || <span className="text-muted">—</span>}</td>
               <td className="px-4 py-3 text-right text-muted">—</td>

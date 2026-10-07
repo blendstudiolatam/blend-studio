@@ -9,6 +9,7 @@
     "lint": "eslint",
     "db:push": "node --env-file-if-exists=.env.local scripts/db-push.mjs",
     "db:types": "node --env-file-if-exists=.env.local scripts/db-types.mjs",
+    "seed:citas": "node --env-file-if-exists=.env.local scripts/seed-demo-citas.mjs",
     "seed:clientes": "node --env-file-if-exists=.env.local scripts/seed-demo-clientes.mjs",
     "seed:salud": "node --env-file-if-exists=.env.local scripts/seed-demo-salud.mjs",
     "seed:empleados": "node --env-file-if-exists=.env.local scripts/seed-demo-empleados.mjs",

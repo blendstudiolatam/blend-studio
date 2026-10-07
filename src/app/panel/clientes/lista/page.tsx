@@ -54,9 +54,14 @@ export default async function ListaClientesPage({ searchParams }: PageProps<"/pa
 
   // Planes y sesiones completadas de los clientes de esta página.
   const ids = (clientes ?? []).map((c) => c.id);
-  const { data: planes } = ids.length
-    ? await supabase.from("planes_tratamiento").select("cliente_id, estado, sesiones:sesiones_tratamiento(estado)").in("cliente_id", ids)
-    : { data: [] };
+  const [{ data: planes }, { data: visitas }] = ids.length
+    ? await Promise.all([
+        supabase.from("planes_tratamiento").select("cliente_id, estado, sesiones:sesiones_tratamiento(estado)").in("cliente_id", ids),
+        supabase.from("citas").select("cliente_id, inicio").in("cliente_id", ids).eq("estado", "completada").order("inicio", { ascending: false }).limit(2000),
+      ])
+    : [{ data: [] }, { data: [] }];
+  const ultimaVisita = new Map<string, string>();
+  for (const v of visitas ?? []) if (!ultimaVisita.has(v.cliente_id)) ultimaVisita.set(v.cliente_id, v.inicio);
   const resumen = new Map<string, { planes: number; sesiones: number }>();
   for (const p of planes ?? []) {
     const r = resumen.get(p.cliente_id) ?? { planes: 0, sesiones: 0 };
@@ -89,6 +94,7 @@ export default async function ListaClientesPage({ searchParams }: PageProps<"/pa
     creado: c.created_at,
     planesActivos: resumen.get(c.id)?.planes ?? 0,
     sesionesCompletadas: resumen.get(c.id)?.sesiones ?? 0,
+    ultimaVisita: ultimaVisita.get(c.id) ?? null,
   }));
 
   return (
