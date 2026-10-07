@@ -164,9 +164,9 @@ Marca cada punto cuando esté terminado y probado.
 - [ ] Botones Editar y Eliminar tratamiento; botón "Nuevo plan de tratamiento"
 
 #### Servicios (Fase 1)
-- [ ] Categorías con descripción, número de servicios y estado; indicadores: total de categorías, servicios en catálogo, categorías activas, categorías sin servicios
-- [ ] Catálogo ilimitado agrupado por categoría: nombre, duración, precio de lista, precio con descuento, porcentaje de ahorro, quién lo realiza
-- [ ] Categorías iniciales sugeridas: Barbería, Cabello, Uñas, Pestañas, Manicure, Pedicure, Facial, Corporal, Depilación, Spa (editables)
+- [x] (sesión 8) Categorías con descripción, número de servicios y estado; indicadores: total de categorías, servicios en catálogo, categorías activas, categorías sin servicios
+- [x] (sesión 8; "quién lo realiza" se completa en Empleados) Catálogo ilimitado agrupado por categoría: nombre, duración, precio de lista, precio con descuento, porcentaje de ahorro, quién lo realiza
+- [x] (cargadas con datos de prueba: npm run seed:servicios) Categorías iniciales sugeridas: Barbería, Cabello, Uñas, Pestañas, Manicure, Pedicure, Facial, Corporal, Depilación, Spa (editables)
 
 #### Personal (Fase 1, salvo lo indicado)
 - [ ] Empleados en tarjetas: foto, nombre, especialidad, rol, estado, contacto, horario y porcentaje de comisión

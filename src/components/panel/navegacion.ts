@@ -83,8 +83,8 @@ export const MODULOS: Modulo[] = [
     fase: 1,
     permiso: "servicios",
     hijos: [
-      { nombre: "Categorías", slug: "categorias", fase: 1 },
-      { nombre: "Catálogo", slug: "catalogo", fase: 1 },
+      { nombre: "Categorías", slug: "categorias", fase: 1, listo: true },
+      { nombre: "Catálogo", slug: "catalogo", fase: 1, listo: true },
     ],
   },
   {

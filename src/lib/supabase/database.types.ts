@@ -51,6 +51,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"categorias_servicio": {
+                  Row: {
+                    "activa": boolean,"created_at": string,"descripcion": string | null,"id": string,"imagen": string | null,"nombre": string,"orden": number,"sucursal_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "activa"?: boolean,"created_at"?: string,"descripcion"?: string | null,"id"?: string,"imagen"?: string | null,"nombre": string,"orden"?: number,"sucursal_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "activa"?: boolean,"created_at"?: string,"descripcion"?: string | null,"id"?: string,"imagen"?: string | null,"nombre"?: string,"orden"?: number,"sucursal_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "categorias_servicio_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"horarios_sucursal": {
                   Row: {
                     "abierto": boolean,"apertura": string,"cierre": string,"dia_semana": number,"id": string,"sucursal_id": string,"updated_at": string
@@ -136,6 +156,32 @@ isOneToOne: false
       columns: ["usuario_id"]
 isOneToOne: false
       referencedRelation: "perfiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"servicios": {
+                  Row: {
+                    "activo": boolean,"categoria_id": string,"created_at": string,"descripcion": string | null,"duracion_min": number,"id": string,"nombre": string,"orden": number,"precio": number,"precio_descuento": number | null,"reserva_web": boolean,"sucursal_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "activo"?: boolean,"categoria_id": string,"created_at"?: string,"descripcion"?: string | null,"duracion_min": number,"id"?: string,"nombre": string,"orden"?: number,"precio": number,"precio_descuento"?: number | null,"reserva_web"?: boolean,"sucursal_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "activo"?: boolean,"categoria_id"?: string,"created_at"?: string,"descripcion"?: string | null,"duracion_min"?: number,"id"?: string,"nombre"?: string,"orden"?: number,"precio"?: number,"precio_descuento"?: number | null,"reserva_web"?: boolean,"sucursal_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "servicios_categoria_id_fkey"
+      columns: ["categoria_id"]
+isOneToOne: false
+      referencedRelation: "categorias_servicio"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "servicios_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
       referencedColumns: ["id"]
     }
                   ]
