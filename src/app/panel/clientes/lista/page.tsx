@@ -44,12 +44,26 @@ export default async function ListaClientesPage({ searchParams }: PageProps<"/pa
 
   const desde = (pagina - 1) * POR_PAGINA;
   const contar = () => supabase.from("clientes").select("id", { count: "exact", head: true });
-  const [{ data: clientes, count }, total, activos, nuevos] = await Promise.all([
+  const [{ data: clientes, count }, total, activos, nuevos, planesActivos] = await Promise.all([
     consulta.order("nombre").order("apellido").range(desde, desde + POR_PAGINA - 1),
     contar(),
     contar().eq("activo", true),
     contar().eq("activo", true).gte("created_at", limiteNuevo),
+    supabase.from("planes_tratamiento").select("id", { count: "exact", head: true }).eq("estado", "activo"),
   ]);
+
+  // Planes y sesiones completadas de los clientes de esta página.
+  const ids = (clientes ?? []).map((c) => c.id);
+  const { data: planes } = ids.length
+    ? await supabase.from("planes_tratamiento").select("cliente_id, estado, sesiones:sesiones_tratamiento(estado)").in("cliente_id", ids)
+    : { data: [] };
+  const resumen = new Map<string, { planes: number; sesiones: number }>();
+  for (const p of planes ?? []) {
+    const r = resumen.get(p.cliente_id) ?? { planes: 0, sesiones: 0 };
+    if (p.estado === "activo") r.planes++;
+    r.sesiones += (p.sesiones ?? []).filter((s) => s.estado === "completada").length;
+    resumen.set(p.cliente_id, r);
+  }
 
   // Fotos privadas: enlaces temporales de 1 hora (la base de datos verifica el permiso).
   const rutas = (clientes ?? []).map((c) => c.foto_path).filter((p): p is string => Boolean(p));
@@ -73,12 +87,14 @@ export default async function ListaClientesPage({ searchParams }: PageProps<"/pa
     foto: c.foto_path ? (fotos.get(c.foto_path) ?? null) : null,
     activo: c.activo,
     creado: c.created_at,
+    planesActivos: resumen.get(c.id)?.planes ?? 0,
+    sesionesCompletadas: resumen.get(c.id)?.sesiones ?? 0,
   }));
 
   return (
     <ListaClientes
       clientes={filas}
-      indicadores={{ total: total.count ?? 0, activos: activos.count ?? 0, nuevos: nuevos.count ?? 0 }}
+      indicadores={{ total: total.count ?? 0, activos: activos.count ?? 0, nuevos: nuevos.count ?? 0, planes: planesActivos.count ?? 0 }}
       filtro={{ texto, estado, pagina, porPagina: POR_PAGINA, encontrados: count ?? 0 }}
       editable={ctx.permisos.clientes === "total"}
     />

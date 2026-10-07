@@ -68,8 +68,8 @@ export const MODULOS: Modulo[] = [
     permiso: "clientes",
     hijos: [
       { nombre: "Lista de clientes", slug: "lista", fase: 1, listo: true },
-      { nombre: "Planes de tratamiento", slug: "tratamientos", fase: 1 },
-      { nombre: "Catálogo de paquetes", slug: "paquetes", fase: 1 },
+      { nombre: "Planes de tratamiento", slug: "tratamientos", fase: 1, listo: true },
+      { nombre: "Catálogo de paquetes", slug: "paquetes", fase: 1, listo: true },
       { nombre: "Tarjeta de fidelidad", slug: "fidelidad", fase: 3 },
       { nombre: "Tarjeta de regalo y cupones", slug: "regalos", fase: 3 },
       { nombre: "Alerta de cumpleaños", slug: "cumpleanos", fase: 1 },

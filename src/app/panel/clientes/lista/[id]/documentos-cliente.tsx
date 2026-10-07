@@ -32,7 +32,18 @@ const peso = (b: number) => (b < 1024 * 1024 ? `${Math.max(1, Math.round(b / 102
 const entrada = "block w-full rounded-lg border border-line bg-surface px-3.5 py-2.5 text-sm outline-none focus:border-gold";
 const etiqueta = "mb-1.5 block text-[11px] font-medium uppercase tracking-[0.16em] text-muted";
 
-export function DocumentosCliente({ clienteId, documentos, editable }: { clienteId: string; documentos: Documento[]; editable: boolean }) {
+export function DocumentosCliente({
+  clienteId,
+  documentos,
+  editable,
+  planes,
+}: {
+  clienteId: string;
+  documentos: Documento[];
+  editable: boolean;
+  planes: { id: string; procedimiento: string }[];
+}) {
+  const [categoria, setCategoria] = useState<Categoria>("consentimiento");
   const router = useRouter();
   const [error, setError] = useState<string>();
   const [ok, setOk] = useState<string>();
@@ -130,6 +141,7 @@ export function DocumentosCliente({ clienteId, documentos, editable }: { cliente
                 setOk(r?.ok);
                 if (r?.ok) {
                   formulario.current?.reset();
+                  setCategoria("consentimiento");
                   router.refresh();
                 }
               })
@@ -138,7 +150,7 @@ export function DocumentosCliente({ clienteId, documentos, editable }: { cliente
             <h3 className="font-display text-xl">Subir documento</h3>
             <label className="block">
               <span className={etiqueta}>Categoría</span>
-              <select name="categoria" defaultValue="consentimiento" className={entrada}>
+              <select name="categoria" value={categoria} onChange={(e) => setCategoria(e.target.value as Categoria)} className={entrada}>
                 {CATEGORIAS.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.nombre}
@@ -146,6 +158,19 @@ export function DocumentosCliente({ clienteId, documentos, editable }: { cliente
                 ))}
               </select>
             </label>
+            {categoria === "antes_despues" && planes.length > 0 && (
+              <label className="block">
+                <span className={etiqueta}>Plan de tratamiento</span>
+                <select name="plan_id" defaultValue={planes[0].id} className={entrada}>
+                  <option value="">Ninguno</option>
+                  {planes.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.procedimiento}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
             <label className="block">
               <span className={etiqueta}>Nombre</span>
               <input name="nombre" required maxLength={120} placeholder="Ej.: Consentimiento facial" className={entrada} />

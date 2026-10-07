@@ -49,6 +49,8 @@ export type FilaCliente = {
   foto: string | null;
   activo: boolean;
   creado: string;
+  planesActivos?: number;
+  sesionesCompletadas?: number;
 };
 
 type Filtro = { texto: string; estado: EstadoCliente | "todos"; pagina: number; porPagina: number; encontrados: number };
@@ -70,7 +72,7 @@ export function ListaClientes({
   editable,
 }: {
   clientes: FilaCliente[];
-  indicadores: { total: number; activos: number; nuevos: number };
+  indicadores: { total: number; activos: number; nuevos: number; planes: number };
   filtro: Filtro;
   editable: boolean;
 }) {
@@ -150,7 +152,7 @@ export function ListaClientes({
         <Indicador etiqueta="Total de clientes" valor={String(indicadores.total)} />
         <Indicador etiqueta="Activos" valor={String(indicadores.activos)} />
         <Indicador etiqueta="Nuevos" valor={String(indicadores.nuevos)} detalle="Últimos 30 días" />
-        <Indicador etiqueta="Planes activos" valor="—" detalle="Llega con Planes de tratamiento" />
+        <Indicador etiqueta="Planes activos" valor={String(indicadores.planes)} detalle="Tratamientos en curso" />
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -341,10 +343,10 @@ function Tabla({ clientes, onAbrir }: { clientes: FilaCliente[]; onAbrir: (c: Fi
                 <p>{c.telefono ?? "—"}</p>
                 {c.email && <p className="max-w-[220px] truncate text-muted">{c.email}</p>}
               </td>
-              {/* Se llenan al construir Agenda, Tratamientos y Ventas. */}
+              {/* Última visita y total gastado se llenan con Agenda y Ventas. */}
               <td className="px-4 py-3 text-muted">—</td>
-              <td className="px-4 py-3 text-right text-muted">—</td>
-              <td className="px-4 py-3 text-right text-muted">—</td>
+              <td className="px-4 py-3 text-right">{c.planesActivos || <span className="text-muted">—</span>}</td>
+              <td className="px-4 py-3 text-right">{c.sesionesCompletadas || <span className="text-muted">—</span>}</td>
               <td className="px-4 py-3 text-right text-muted">—</td>
               <td className="px-4 py-3">
                 <Estado c={c} />

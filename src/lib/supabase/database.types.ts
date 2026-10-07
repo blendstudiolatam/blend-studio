@@ -151,14 +151,14 @@ isOneToOne: false
                   ]
                 },"documentos_cliente": {
                   Row: {
-                    "categoria": Database["public"]['Enums']["categoria_documento"],"cliente_id": string,"created_at": string,"id": string,"nombre": string,"path": string,"subido_por": string | null,"tamano": number,"tipo": string
+                    "categoria": Database["public"]['Enums']["categoria_documento"],"cliente_id": string,"created_at": string,"id": string,"nombre": string,"path": string,"plan_id": string | null,"subido_por": string | null,"tamano": number,"tipo": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "categoria": Database["public"]['Enums']["categoria_documento"],"cliente_id": string,"created_at"?: string,"id"?: string,"nombre": string,"path": string,"subido_por"?: string | null,"tamano": number,"tipo": string
+                    "categoria": Database["public"]['Enums']["categoria_documento"],"cliente_id": string,"created_at"?: string,"id"?: string,"nombre": string,"path": string,"plan_id"?: string | null,"subido_por"?: string | null,"tamano": number,"tipo": string
                   }
                   Update: {
-                    "categoria"?: Database["public"]['Enums']["categoria_documento"],"cliente_id"?: string,"created_at"?: string,"id"?: string,"nombre"?: string,"path"?: string,"subido_por"?: string | null,"tamano"?: number,"tipo"?: string
+                    "categoria"?: Database["public"]['Enums']["categoria_documento"],"cliente_id"?: string,"created_at"?: string,"id"?: string,"nombre"?: string,"path"?: string,"plan_id"?: string | null,"subido_por"?: string | null,"tamano"?: number,"tipo"?: string
                   }
                   Relationships: [
                     {
@@ -166,6 +166,12 @@ isOneToOne: false
       columns: ["cliente_id"]
 isOneToOne: false
       referencedRelation: "clientes"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "documentos_cliente_plan_id_fkey"
+      columns: ["plan_id"]
+isOneToOne: false
+      referencedRelation: "planes_tratamiento"
       referencedColumns: ["id"]
     },{
       foreignKeyName: "documentos_cliente_subido_por_fkey"
@@ -345,6 +351,32 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"paquetes": {
+                  Row: {
+                    "activo": boolean,"created_at": string,"descripcion": string | null,"frecuencia_dias": number,"id": string,"nombre": string,"orden": number,"precio_sesion": number,"precio_total": number,"servicio_id": string | null,"sesiones": number,"sucursal_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "activo"?: boolean,"created_at"?: string,"descripcion"?: string | null,"frecuencia_dias"?: number,"id"?: string,"nombre": string,"orden"?: number,"precio_sesion": number,"precio_total": number,"servicio_id"?: string | null,"sesiones": number,"sucursal_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "activo"?: boolean,"created_at"?: string,"descripcion"?: string | null,"frecuencia_dias"?: number,"id"?: string,"nombre"?: string,"orden"?: number,"precio_sesion"?: number,"precio_total"?: number,"servicio_id"?: string | null,"sesiones"?: number,"sucursal_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "paquetes_servicio_id_fkey"
+      columns: ["servicio_id"]
+isOneToOne: false
+      referencedRelation: "servicios"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "paquetes_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"perfiles": {
                   Row: {
                     "created_at": string,"email": string | null,"es_dueno": boolean,"id": string,"nombre_completo": string,"telefono": string | null,"updated_at": string
@@ -399,6 +431,56 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"planes_tratamiento": {
+                  Row: {
+                    "cliente_id": string,"creado_por": string | null,"created_at": string,"estado": Database["public"]['Enums']["estado_plan"],"fecha_inicio": string,"frecuencia_dias": number,"id": string,"notas": string | null,"paquete_id": string | null,"precio_sesion": number,"precio_total": number,"procedimiento": string,"profesional_id": string | null,"servicio_id": string | null,"sesiones_total": number,"sucursal_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cliente_id": string,"creado_por"?: string | null,"created_at"?: string,"estado"?: Database["public"]['Enums']["estado_plan"],"fecha_inicio": string,"frecuencia_dias"?: number,"id"?: string,"notas"?: string | null,"paquete_id"?: string | null,"precio_sesion": number,"precio_total": number,"procedimiento": string,"profesional_id"?: string | null,"servicio_id"?: string | null,"sesiones_total": number,"sucursal_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "cliente_id"?: string,"creado_por"?: string | null,"created_at"?: string,"estado"?: Database["public"]['Enums']["estado_plan"],"fecha_inicio"?: string,"frecuencia_dias"?: number,"id"?: string,"notas"?: string | null,"paquete_id"?: string | null,"precio_sesion"?: number,"precio_total"?: number,"procedimiento"?: string,"profesional_id"?: string | null,"servicio_id"?: string | null,"sesiones_total"?: number,"sucursal_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "planes_tratamiento_cliente_id_fkey"
+      columns: ["cliente_id"]
+isOneToOne: false
+      referencedRelation: "clientes"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "planes_tratamiento_creado_por_fkey"
+      columns: ["creado_por"]
+isOneToOne: false
+      referencedRelation: "perfiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "planes_tratamiento_paquete_id_fkey"
+      columns: ["paquete_id"]
+isOneToOne: false
+      referencedRelation: "paquetes"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "planes_tratamiento_profesional_id_fkey"
+      columns: ["profesional_id"]
+isOneToOne: false
+      referencedRelation: "empleados"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "planes_tratamiento_servicio_id_fkey"
+      columns: ["servicio_id"]
+isOneToOne: false
+      referencedRelation: "servicios"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "planes_tratamiento_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"servicios": {
                   Row: {
                     "activo": boolean,"categoria_id": string,"created_at": string,"descripcion": string | null,"duracion_min": number,"id": string,"nombre": string,"orden": number,"precio": number,"precio_descuento": number | null,"reserva_web": boolean,"sucursal_id": string,"updated_at": string
@@ -419,6 +501,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     },{
       foreignKeyName: "servicios_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"sesiones_tratamiento": {
+                  Row: {
+                    "estado": Database["public"]['Enums']["estado_sesion"],"fecha": string | null,"hora": string | null,"id": string,"notas": string | null,"numero": number,"pagada": boolean,"plan_id": string,"sucursal_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "estado"?: Database["public"]['Enums']["estado_sesion"],"fecha"?: string | null,"hora"?: string | null,"id"?: string,"notas"?: string | null,"numero": number,"pagada"?: boolean,"plan_id": string,"sucursal_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "estado"?: Database["public"]['Enums']["estado_sesion"],"fecha"?: string | null,"hora"?: string | null,"id"?: string,"notas"?: string | null,"numero"?: number,"pagada"?: boolean,"plan_id"?: string,"sucursal_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sesiones_tratamiento_plan_id_fkey"
+      columns: ["plan_id"]
+isOneToOne: false
+      referencedRelation: "planes_tratamiento"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "sesiones_tratamiento_sucursal_id_fkey"
       columns: ["sucursal_id"]
 isOneToOne: false
       referencedRelation: "sucursales"
@@ -452,7 +560,7 @@ isOneToOne: false
                            },
 "documentos_de_cliente":
 { Args: { "p_cliente": string }; Returns: {
-              "categoria": Database["public"]['Enums']["categoria_documento"],"created_at": string,"id": string,"nombre": string,"subido_por_nombre": string,"tamano": number,"tipo": string
+              "categoria": Database["public"]['Enums']["categoria_documento"],"created_at": string,"id": string,"nombre": string,"plan_id": string,"subido_por_nombre": string,"tamano": number,"tipo": string
             }[]
                            },
 "eliminar_documento":
@@ -483,7 +591,7 @@ isOneToOne: false
             }[]
                            },
 "registrar_documento":
-{ Args: { "p_categoria": Database["public"]['Enums']["categoria_documento"],"p_cliente": string,"p_nombre": string,"p_tamano": number,"p_tipo": string }; Returns: {
+{ Args: { "p_categoria": Database["public"]['Enums']["categoria_documento"],"p_cliente": string,"p_nombre": string,"p_plan"?: string,"p_tamano": number,"p_tipo": string }; Returns: {
               "id": string,"path": string
             }[]
                            },
@@ -492,7 +600,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "categoria_documento": "consentimiento"|"estudio"|"antes_despues"|"receta"|"identificacion"|"otro","estado_empleado": "activo"|"vacaciones"|"inactivo","modulo_app": "agenda"|"clientes"|"servicios"|"personal"|"productos"|"ventas"|"caja"|"finanzas"|"reportes"|"configuracion","nivel_permiso": "ninguno"|"lectura"|"total","rol_usuario": "admin"|"recepcion"|"estilista"|"asistente"
+            "categoria_documento": "consentimiento"|"estudio"|"antes_despues"|"receta"|"identificacion"|"otro","estado_empleado": "activo"|"vacaciones"|"inactivo","estado_plan": "activo"|"pausado"|"completado"|"cancelado","estado_sesion": "pendiente"|"completada"|"cancelada","modulo_app": "agenda"|"clientes"|"servicios"|"personal"|"productos"|"ventas"|"caja"|"finanzas"|"reportes"|"configuracion","nivel_permiso": "ninguno"|"lectura"|"total","rol_usuario": "admin"|"recepcion"|"estilista"|"asistente"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -608,7 +716,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "categoria_documento": ["consentimiento", "estudio", "antes_despues", "receta", "identificacion", "otro"],"estado_empleado": ["activo", "vacaciones", "inactivo"],"modulo_app": ["agenda", "clientes", "servicios", "personal", "productos", "ventas", "caja", "finanzas", "reportes", "configuracion"],"nivel_permiso": ["ninguno", "lectura", "total"],"rol_usuario": ["admin", "recepcion", "estilista", "asistente"]
+            "categoria_documento": ["consentimiento", "estudio", "antes_despues", "receta", "identificacion", "otro"],"estado_empleado": ["activo", "vacaciones", "inactivo"],"estado_plan": ["activo", "pausado", "completado", "cancelado"],"estado_sesion": ["pendiente", "completada", "cancelada"],"modulo_app": ["agenda", "clientes", "servicios", "personal", "productos", "ventas", "caja", "finanzas", "reportes", "configuracion"],"nivel_permiso": ["ninguno", "lectura", "total"],"rol_usuario": ["admin", "recepcion", "estilista", "asistente"]
           }
         }
 } as const

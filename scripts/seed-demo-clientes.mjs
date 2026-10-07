@@ -13,7 +13,7 @@ if (!url || !secreta) {
 const sb = createClient(url, secreta, { auth: { persistSession: false, autoRefreshToken: false } });
 const { clientes } = JSON.parse(readFileSync("supabase/seed-demo/personas.json", "utf8"));
 
-const sinAcentos = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z]/g, "");
+const sinAcentos = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, "");
 const haceDias = (d) => new Date(Date.now() - d * 86_400_000).toISOString();
 
 // Días desde que se registró cada cliente (los de 3 a 25 días cuentan como "nuevos").

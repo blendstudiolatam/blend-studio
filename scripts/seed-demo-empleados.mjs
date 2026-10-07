@@ -14,7 +14,7 @@ const sb = createClient(url, secreta, { auth: { persistSession: false, autoRefre
 const { empleados } = JSON.parse(readFileSync("supabase/seed-demo/personas.json", "utf8"));
 const { categorias } = JSON.parse(readFileSync("supabase/seed-demo/servicios.json", "utf8"));
 
-const sinAcentos = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z]/g, "");
+const sinAcentos = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, "");
 const telefono = (i) => `+507 6${(510 + i * 37) % 900 + 100}-${String(4000 + i * 811).slice(-4)}`;
 
 const { data: sucursal, error: errSuc } = await sb.from("sucursales").select("id").eq("slug", "blend-studio-1").single();

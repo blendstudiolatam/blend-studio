@@ -83,7 +83,9 @@ export async function subirDocumento(clienteId: string, formData: FormData): Pro
   const id = idSchema.safeParse(clienteId);
   const categoria = categoriaSchema.safeParse(formData.get("categoria"));
   const nombre = z.string().trim().min(1, { error: "Ponle un nombre al documento." }).max(120).safeParse(formData.get("nombre"));
+  const plan = z.union([z.literal(""), z.guid()]).safeParse(formData.get("plan_id") ?? "");
   const archivo = formData.get("archivo");
+  if (!plan.success) return { error: "Plan no válido." };
   if (!id.success) return { error: "Cliente no válido." };
   if (!categoria.success) return { error: "Elige una categoría." };
   if (!nombre.success) return { error: nombre.error.issues[0]?.message };
@@ -118,6 +120,7 @@ export async function subirDocumento(clienteId: string, formData: FormData): Pro
       p_nombre: nombre.data,
       p_tipo: tipo,
       p_tamano: contenido.length,
+      p_plan: plan.data || undefined,
     })
     .single();
   if (error || !data) return { error: mensaje(error?.code, "No se pudo registrar el documento.") };

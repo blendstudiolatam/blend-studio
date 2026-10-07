@@ -18,7 +18,7 @@ const SUCURSAL_SLUG = "blend-studio-1";
 const sb = createClient(url, secreta, { auth: { persistSession: false, autoRefreshToken: false } });
 const { empleados } = JSON.parse(readFileSync("supabase/seed-demo/personas.json", "utf8"));
 
-const sinAcentos = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z]/g, "");
+const sinAcentos = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, "");
 const contrasena = () => {
   const c = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
   return Array.from({ length: 16 }, () => c[randomInt(c.length)]).join("");

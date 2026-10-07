@@ -20,6 +20,8 @@ import { FormularioCliente } from "../formulario-cliente";
 import type { FilaCliente } from "../lista-clientes";
 import { DocumentosCliente, type Documento } from "./documentos-cliente";
 import { HistorialMedico, type Consulta, type DatosSalud } from "./historial-medico";
+import { PlanesCliente, type FotoPlan, type Plan } from "./planes-cliente";
+import type { EstadoPlan, EstadoSesion } from "@/lib/tratamientos";
 
 export const metadata: Metadata = { title: "Ficha del cliente" };
 
@@ -33,10 +35,6 @@ const PESTANAS = [
 ] as const;
 
 const PROXIMAMENTE: Record<string, { titulo: string; texto: string }> = {
-  tratamientos: {
-    titulo: "Planes de tratamiento",
-    texto: "Paquetes de sesiones con progreso, pagos y recordatorios. Llega en la próxima sesión de trabajo.",
-  },
   facturas: { titulo: "Facturas y recibos", texto: "Se llenará con el punto de venta y la factura electrónica (Fase 2)." },
   ventas: { titulo: "Ventas del cliente", texto: "Servicios y productos comprados, con totales. Llega con el punto de venta (Fase 2)." },
 };
@@ -152,6 +150,16 @@ export default async function FichaClientePage({ params, searchParams }: PagePro
       )}
       {pestana === "salud" && <PestanaSalud clienteId={c.id} editable={editarSalud} verRegistro={ctx.rol === "admin"} />}
       {pestana === "documentos" && <PestanaDocumentos clienteId={c.id} editable={editarSalud} />}
+      {pestana === "tratamientos" && (
+        <PestanaTratamientos
+          clienteId={c.id}
+          clienteNombre={nombre}
+          telefono={c.telefono}
+          sucursalId={ctx.sucursal.id}
+          editable={ctx.permisos.clientes === "total"}
+          verSalud={verSalud}
+        />
+      )}
       {PROXIMAMENTE[pestana] && (
         <div className="rounded-xl border border-dashed border-line bg-surface px-6 py-14 text-center">
           <p className="text-[11px] uppercase tracking-[0.3em] text-gold-strong">Próximamente</p>
@@ -193,6 +201,11 @@ async function PestanaDocumentos({ clienteId, editable }: { clienteId: string; e
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("documentos_de_cliente", { p_cliente: clienteId });
   if (error) notFound();
+  const { data: planes } = await supabase
+    .from("planes_tratamiento")
+    .select("id, procedimiento")
+    .eq("cliente_id", clienteId)
+    .order("created_at", { ascending: false });
   const documentos: Documento[] = (data ?? []).map((d) => ({
     id: d.id,
     categoria: d.categoria,
@@ -202,5 +215,86 @@ async function PestanaDocumentos({ clienteId, editable }: { clienteId: string; e
     subidoPor: d.subido_por_nombre,
     fecha: d.created_at,
   }));
-  return <DocumentosCliente clienteId={clienteId} documentos={documentos} editable={editable} />;
+  return <DocumentosCliente clienteId={clienteId} documentos={documentos} editable={editable} planes={planes ?? []} />;
+}
+
+async function PestanaTratamientos({
+  clienteId,
+  clienteNombre,
+  telefono,
+  sucursalId,
+  editable,
+  verSalud,
+}: {
+  clienteId: string;
+  clienteNombre: string;
+  telefono: string | null;
+  sucursalId: string;
+  editable: boolean;
+  verSalud: boolean;
+}) {
+  const supabase = await createClient();
+  const [{ data: planes }, { data: paquetes }, { data: empleados }, documentos] = await Promise.all([
+    supabase
+      .from("planes_tratamiento")
+      .select(
+        "id, sucursal_id, procedimiento, paquete_id, servicio_id, profesional_id, sesiones_total, frecuencia_dias, fecha_inicio, precio_sesion, precio_total, estado, notas, sucursal:sucursales(nombre), sesiones:sesiones_tratamiento(id, numero, fecha, hora, estado, pagada)",
+      )
+      .eq("cliente_id", clienteId)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("paquetes")
+      .select("id, servicio_id, nombre, sesiones, frecuencia_dias, precio_sesion, precio_total")
+      .eq("sucursal_id", sucursalId)
+      .eq("activo", true)
+      .order("orden")
+      .order("nombre"),
+    supabase.from("empleados").select("id, nombre, apellido, color, foto_path, rol, estado").order("orden"),
+    verSalud ? supabase.rpc("documentos_de_cliente", { p_cliente: clienteId }) : Promise.resolve({ data: null }),
+  ]);
+
+  const lista: Plan[] = (planes ?? []).map((p) => ({
+    id: p.id,
+    procedimiento: p.procedimiento,
+    paquete_id: p.paquete_id,
+    servicio_id: p.servicio_id,
+    profesional_id: p.profesional_id,
+    sesiones_total: p.sesiones_total,
+    frecuencia_dias: p.frecuencia_dias,
+    fecha_inicio: p.fecha_inicio,
+    precio_sesion: Number(p.precio_sesion),
+    precio_total: Number(p.precio_total),
+    estado: p.estado as EstadoPlan,
+    notas: p.notas,
+    sucursal: p.sucursal?.nombre ?? "",
+    editable: editable && p.sucursal_id === sucursalId,
+    sesiones: [...(p.sesiones ?? [])]
+      .sort((a, b) => a.numero - b.numero)
+      .map((s) => ({ ...s, estado: s.estado as EstadoSesion })),
+  }));
+
+  let fotos: Record<string, FotoPlan[]> | null = null;
+  if (verSalud) {
+    fotos = {};
+    for (const d of documentos.data ?? []) {
+      if (!d.plan_id || d.categoria !== "antes_despues") continue;
+      (fotos[d.plan_id] ??= []).push({ id: d.id, nombre: d.nombre, fecha: d.created_at });
+    }
+    for (const k of Object.keys(fotos)) fotos[k].sort((a, b) => a.fecha.localeCompare(b.fecha));
+  }
+
+  return (
+    <PlanesCliente
+      clienteId={clienteId}
+      clienteNombre={clienteNombre}
+      telefono={telefono}
+      planes={lista}
+      paquetes={(paquetes ?? []).map((p) => ({ ...p, precio_sesion: Number(p.precio_sesion), precio_total: Number(p.precio_total) }))}
+      profesionales={(empleados ?? [])
+        .filter((e) => e.estado !== "inactivo")
+        .map((e) => ({ id: e.id, nombre: `${e.nombre} ${e.apellido}`.trim(), color: e.color, fotoPath: e.foto_path }))}
+      fotos={fotos}
+      puedeCrear={editable}
+    />
+  );
 }
