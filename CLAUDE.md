@@ -33,6 +33,10 @@
 - Historial médico del cliente: lo ven admin y recepción; cada profesional solo el de sus clientes con cita; registro de quién lo consulta.
 - Datos de prueba: al menos 20 clientes ficticios (hombres y mujeres) y 8 empleados que cubran todos los roles, con tratamientos, sesiones agendadas, documentos y fotos de antes/después y de avance. Solo en el proyecto de desarrollo, nunca en producción.
 
+## Imágenes de marca (entregadas por Julio, 2026-10-07)
+- `public/ambiente/`: fotos propias del salón para usar donde haga falta (reservas web, categorías de servicios, pantallas vacías, entrada). Estilo: madera de nogal, travertino, terrazo, latón, plantas, luz cálida. Nombres por servicio: `barberia-corte`, `barberia-afeitado`, `barberia-tijera`, `coloracion`, `brushing`, `lavado`, `peinado-recogido`, `resultado-cabello`, `unas`, `pestanas`, `cejas`, `maquillaje`, `facial`, `spa-masaje`, `spa-lounge`, `recepcion`, `salon-interior`, `herramientas`.
+- `docs/referencias/moodboard-estilo.webp`: solo referencia de estilo (tono oscuro elegante con dorado, tarjetas de servicio con foto). No publicar: contiene logos de otras marcas.
+
 ## Seguridad (obligatoria, no opcional)
 - RLS activado en todas las tablas, con políticas por sucursal y por rol. Ninguna tabla sin política.
 - Roles: dueño/admin, recepción, estilista. El estilista ve solo su agenda y sus comisiones; finanzas y caja solo admin.
