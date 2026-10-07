@@ -1,46 +1,72 @@
+import { CalendarDays, ChartColumn, House } from "lucide-react";
 import type { Metadata } from "next";
-import { requirePanel, type Rol } from "@/lib/auth/sesion";
+import Link from "next/link";
+import { Encabezado, Indicador } from "@/components/panel/encabezado";
+import { requirePanel } from "@/lib/auth/sesion";
 
 export const metadata: Metadata = { title: "Inicio" };
 
-type Modulo = { nombre: string; descripcion: string; roles: Rol[] };
-
-// Módulos de la Fase 1. Se irán activando en las próximas sesiones.
-const modulos: Modulo[] = [
-  { nombre: "Agenda", descripcion: "Citas del día y de la semana", roles: ["admin", "recepcion", "estilista"] },
-  { nombre: "Clientes", descripcion: "Fichas, historial y notas", roles: ["admin", "recepcion"] },
-  { nombre: "Servicios", descripcion: "Categorías, duración y precios", roles: ["admin", "recepcion"] },
-  { nombre: "Empleados", descripcion: "Horarios, servicios y comisiones", roles: ["admin"] },
-  { nombre: "Comisiones", descripcion: "Lo ganado por servicio realizado", roles: ["admin", "estilista"] },
-  { nombre: "Ajustes", descripcion: "Negocio, marca y sucursales", roles: ["admin"] },
-];
+function saludo(): string {
+  const hora = Number(
+    new Intl.DateTimeFormat("es-PA", {
+      hour: "numeric",
+      hourCycle: "h23",
+      timeZone: "America/Panama",
+    }).format(new Date()),
+  );
+  if (hora < 12) return "¡Buen día";
+  if (hora < 19) return "¡Buenas tardes";
+  return "¡Buenas noches";
+}
 
 export default async function PanelPage() {
   const { nombre, rol, sucursal } = await requirePanel();
-  const visibles = modulos.filter((m) => m.roles.includes(rol));
   const primerNombre = nombre.split(" ")[0];
+  const hoy = new Intl.DateTimeFormat("es-PA", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    timeZone: "America/Panama",
+  }).format(new Date());
 
   return (
-    <div>
-      <p className="text-[11px] uppercase tracking-[0.3em] text-gold-strong">{sucursal.nombre}</p>
-      <h1 className="mt-2 font-display text-4xl">Hola, {primerNombre}</h1>
+    <div className="space-y-8">
+      <Encabezado
+        icono={House}
+        titulo={`${saludo()}, ${primerNombre}!`}
+        subtitulo={`${sucursal.nombre} · ${hoy}`}
+        accion={
+          <div className="flex gap-2">
+            <Link
+              href="/panel/agenda"
+              className="inline-flex items-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-xs uppercase tracking-[0.16em] text-ivory hover:bg-ink/85"
+            >
+              <CalendarDays className="h-4 w-4" /> Abrir agenda
+            </Link>
+            {rol === "admin" && (
+              <Link
+                href="/panel/reportes"
+                className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-4 py-2.5 text-xs uppercase tracking-[0.16em] hover:border-gold"
+              >
+                <ChartColumn className="h-4 w-4" /> Ver reportes
+              </Link>
+            )}
+          </div>
+        }
+      />
 
-      <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {visibles.map((m) => (
-          <li
-            key={m.nombre}
-            className="rounded-xl border border-line bg-surface p-5"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <h2 className="font-display text-2xl">{m.nombre}</h2>
-              <span className="rounded-full bg-background px-2.5 py-1 text-[10px] uppercase tracking-[0.15em] text-muted">
-                Próximamente
-              </span>
-            </div>
-            <p className="mt-2 text-sm text-muted">{m.descripcion}</p>
-          </li>
-        ))}
-      </ul>
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Indicador etiqueta="Clientes" valor="—" detalle="Disponible al crear Clientes" />
+        <Indicador etiqueta="Nuevos este mes" valor="—" detalle="Disponible al crear Clientes" />
+        <Indicador etiqueta="Reservas de hoy" valor="—" detalle="Disponible al crear la Agenda" />
+      </div>
+
+      <section className="rounded-xl border border-line bg-surface p-6">
+        <h2 className="font-display text-2xl">Reservas de hoy</h2>
+        <p className="mt-6 py-8 text-center text-sm text-muted">
+          Aquí verás las citas del día cuando la Agenda esté lista.
+        </p>
+      </section>
     </div>
   );
 }
