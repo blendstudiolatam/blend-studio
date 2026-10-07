@@ -15,6 +15,8 @@ type Props = {
   etiquetaRol: string;
   sucursal: string;
   variasSucursales: boolean;
+  nombreNegocio: string;
+  logoUrl: string | null;
 };
 
 export function MenuLateral(props: Props) {
@@ -25,7 +27,7 @@ export function MenuLateral(props: Props) {
     <>
       {/* Celular: barra con logo y botón de menú */}
       <div className="sticky top-0 z-30 flex items-center justify-between bg-ink px-4 py-3 text-ivory lg:hidden">
-        <Marca compacta />
+        <Marca compacta nombre={props.nombreNegocio} logoUrl={props.logoUrl} />
         <button
           type="button"
           onClick={() => setAbierto(true)}
@@ -68,41 +70,54 @@ export function MenuLateral(props: Props) {
   );
 }
 
-function Marca({ compacta = false }: { compacta?: boolean }) {
+function Marca({
+  compacta = false,
+  nombre,
+  logoUrl,
+}: {
+  compacta?: boolean;
+  nombre: string;
+  logoUrl: string | null;
+}) {
   return (
     <Link href="/panel" className="flex items-center gap-3">
       <span
-        className={`relative overflow-hidden rounded-full ring-1 ring-gold/60 ${
+        className={`relative shrink-0 overflow-hidden rounded-full ring-1 ring-gold/60 ${
           compacta ? "h-9 w-9" : "h-14 w-14"
         }`}
       >
         <Image
-          src="/brand/logo-provisional.png"
-          alt="Blend Studio"
+          src={logoUrl ?? "/brand/logo-provisional.png"}
+          alt={nombre}
           fill
           sizes="56px"
           className="object-cover"
         />
       </span>
-      {compacta && (
-        <span className="font-display text-lg leading-none">
-          Blend <span className="italic">Studio</span>
-        </span>
-      )}
+      {compacta && <span className="font-display text-lg leading-none">{nombre}</span>}
     </Link>
   );
 }
 
-function Contenido({ permisos, rol, etiquetaRol, sucursal, variasSucursales, pathname }: Props & { pathname: string }) {
+function Contenido({
+  permisos,
+  rol,
+  etiquetaRol,
+  sucursal,
+  variasSucursales,
+  nombreNegocio,
+  logoUrl,
+  pathname,
+}: Props & { pathname: string }) {
   const modulos = modulosVisibles(permisos, rol);
   const activo = buscarRuta(pathname);
 
   return (
     <>
       <div className="flex items-center gap-3 border-b border-ivory/10 px-5 pb-5 pt-6">
-        <Marca />
+        <Marca nombre={nombreNegocio} logoUrl={logoUrl} />
         <div className="min-w-0 leading-tight">
-          <p className="truncate font-display text-xl">Blend Studio</p>
+          <p className="truncate font-display text-xl">{nombreNegocio}</p>
           <p className="mt-1 flex items-center gap-1.5 text-[10px] uppercase tracking-[0.16em] text-ivory/70">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-label="Conectado" />
             {etiquetaRol}

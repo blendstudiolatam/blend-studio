@@ -2,7 +2,8 @@
 
 /*
   Marca provisional de Blend Studio (hasta recibir el manual de identidad).
-  En la sesión de Ajustes estos valores se podrán sobrescribir desde la base de datos.
+  Los colores y tipografías elegidos en Configuración > Preferencias se aplican
+  sobre estos valores desde el layout raíz (variables en <html>).
 */
 :root {
   --brand-ink: #0b0b0b;
@@ -27,8 +28,8 @@
   --color-ivory: var(--brand-ivory);
   --color-gold: var(--brand-gold);
   --color-gold-strong: var(--brand-gold-strong);
-  --font-sans: var(--font-jost);
-  --font-display: var(--font-bodoni);
+  --font-sans: var(--font-texto, var(--font-jost));
+  --font-display: var(--font-titulos, var(--font-bodoni));
 }
 
 body {

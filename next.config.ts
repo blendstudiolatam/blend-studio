@@ -17,8 +17,22 @@ const securityHeaders = [
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
 ];
 
+const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+  : undefined;
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  images: {
+    // Solo imágenes públicas del almacenamiento de la marca en nuestro proyecto de Supabase.
+    remotePatterns: supabaseHost
+      ? [{ protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/marca/**" }]
+      : [],
+  },
+  experimental: {
+    // Para subir el logo (hasta ~3 MB antes de comprimirlo).
+    serverActions: { bodySizeLimit: "4mb" },
+  },
   async headers() {
     return [
       { source: "/(.*)", headers: securityHeaders },

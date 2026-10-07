@@ -6,9 +6,11 @@ export function buildCsp(nonce: string, supabaseUrl: string | null): string {
   const isDev = process.env.NODE_ENV === "development";
 
   const connect = ["'self'"];
+  const img = ["'self'", "blob:", "data:"];
   if (supabaseUrl) {
     const { host } = new URL(supabaseUrl);
     connect.push(`https://${host}`, `wss://${host}`);
+    img.push(`https://${host}`); // logo y archivos públicos de la marca
   }
 
   const directives = [
@@ -17,7 +19,7 @@ export function buildCsp(nonce: string, supabaseUrl: string | null): string {
     // Estilos en línea permitidos: los usan next/image y la agenda (posición de citas).
     // El riesgo real (scripts) sigue bloqueado por script-src con nonce.
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' blob: data:",
+    `img-src ${img.join(" ")}`,
     "font-src 'self'",
     `connect-src ${connect.join(" ")}`,
     "worker-src 'self'",

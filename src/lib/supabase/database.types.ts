@@ -51,6 +51,40 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"horarios_sucursal": {
+                  Row: {
+                    "abierto": boolean,"apertura": string,"cierre": string,"dia_semana": number,"id": string,"sucursal_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "abierto"?: boolean,"apertura"?: string,"cierre"?: string,"dia_semana": number,"id"?: string,"sucursal_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "abierto"?: boolean,"apertura"?: string,"cierre"?: string,"dia_semana"?: number,"id"?: string,"sucursal_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "horarios_sucursal_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"negocio": {
+                  Row: {
+                    "color_acento": string,"color_fondo": string,"color_primario": string,"created_at": string,"dv": string | null,"email": string | null,"email_respaldo": string | null,"facebook": string | null,"horario_texto": string | null,"id": string,"instagram": string | null,"itbms_pct": number,"logo_path": string | null,"mensaje_comprobante": string | null,"moneda": string,"nombre_comercial": string,"nombre_legal": string | null,"ruc": string | null,"sitio_web": string | null,"telefono": string | null,"tiktok": string | null,"tipografia_texto": string,"tipografia_titulos": string,"unico": boolean,"updated_at": string,"whatsapp": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "color_acento"?: string,"color_fondo"?: string,"color_primario"?: string,"created_at"?: string,"dv"?: string | null,"email"?: string | null,"email_respaldo"?: string | null,"facebook"?: string | null,"horario_texto"?: string | null,"id"?: string,"instagram"?: string | null,"itbms_pct"?: number,"logo_path"?: string | null,"mensaje_comprobante"?: string | null,"moneda"?: string,"nombre_comercial"?: string,"nombre_legal"?: string | null,"ruc"?: string | null,"sitio_web"?: string | null,"telefono"?: string | null,"tiktok"?: string | null,"tipografia_texto"?: string,"tipografia_titulos"?: string,"unico"?: boolean,"updated_at"?: string,"whatsapp"?: string | null
+                  }
+                  Update: {
+                    "color_acento"?: string,"color_fondo"?: string,"color_primario"?: string,"created_at"?: string,"dv"?: string | null,"email"?: string | null,"email_respaldo"?: string | null,"facebook"?: string | null,"horario_texto"?: string | null,"id"?: string,"instagram"?: string | null,"itbms_pct"?: number,"logo_path"?: string | null,"mensaje_comprobante"?: string | null,"moneda"?: string,"nombre_comercial"?: string,"nombre_legal"?: string | null,"ruc"?: string | null,"sitio_web"?: string | null,"telefono"?: string | null,"tiktok"?: string | null,"tipografia_texto"?: string,"tipografia_titulos"?: string,"unico"?: boolean,"updated_at"?: string,"whatsapp"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"perfiles": {
                   Row: {
                     "created_at": string,"email": string | null,"es_dueno": boolean,"id": string,"nombre_completo": string,"telefono": string | null,"updated_at": string
@@ -130,6 +164,11 @@ isOneToOne: false
                            },
 "login_registrar_intento":
 { Args: { "p_email_hash": string,"p_exito": boolean,"p_ip": string }; Returns: undefined
+                           },
+"marca_publica":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "color_acento": string,"color_fondo": string,"color_primario": string,"email": string,"facebook": string,"horario_texto": string,"instagram": string,"logo_path": string,"nombre_comercial": string,"sitio_web": string,"telefono": string,"tiktok": string,"tipografia_texto": string,"tipografia_titulos": string,"whatsapp": string
+            }[]
                            },
 "mis_permisos":
 { Args: { "p_sucursal": string }; Returns: {

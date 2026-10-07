@@ -55,6 +55,7 @@
 - Migraciones en `supabase/migrations/`; se aplican con `npm run db:push` (usa `SUPABASE_DB_URL` de `.env.local`).
 - Cada tabla nueva: `revoke all ... from anon, authenticated`, luego `grant` solo lo necesario (por columna si aplica), `enable row level security` y políticas usando las funciones de `privado` (`tiene_acceso`, `tiene_rol`, `es_admin`, `es_dueno`).
 - Permisos por módulo (sesión 4): en las políticas de tablas de negocio usar `privado.puede(sucursal_id, '<modulo>', escribir)`; ya aplica los límites fijos. En la app, `requireModulo(modulo, editar)` en cada página/acción. Roles: `admin`, `recepcion`, `estilista` (se muestra "Profesional"), `asistente`.
+- Marca: `negocio` (una fila) + `public.marca_publica()` para datos públicos; `getMarca()` aplica colores y tipografías como variables CSS en `<html>`. Logo en Storage `marca` (público, solo admins escriben; el servidor lo convierte a WebP). Horario por día en `horarios_sucursal`.
 - Tablas con citas, ventas o caja: trigger `privado.registrar_auditoria()`.
 - Toda tabla nueva con pruebas de permisos en `tests/rls/` (`npm run test:rls`). Las pruebas corren en transacciones que se deshacen.
 - El dueño (`perfiles.es_dueno`) es admin en todas las sucursales; solo se activa por SQL.
@@ -115,12 +116,12 @@ Se replica la estructura y las funciones, no la apariencia: colores, fotos, ilus
 Marca cada punto cuando esté terminado y probado.
 
 #### Configuración (Fase 1)
-- [ ] Datos del negocio: logo, nombre legal, nombre comercial, RUC, horario de atención (texto), hora de apertura y cierre; no se pueden agendar citas fuera de ese rango, ni desde el panel ni desde la web de reservas
-- [ ] Contacto: teléfono, WhatsApp, correo y correo de respaldo para recordatorios; redes sociales
-- [ ] Vista previa del comprobante en tiempo real mientras se edita (logo, datos, horario y redes)
-- [ ] Guardado automático y botón Restablecer
-- [ ] Preferencias: moneda, impuesto (ITBMS 7%), colores del dashboard, tipografía
-- [ ] Sucursales: crear y elegir sucursal activa (selector visible en Ventas, Caja e Inventario)
+- [x] (sesiones 6-7; el bloqueo de citas fuera de horario se aplica al construir Agenda y Reservas) Datos del negocio: logo, nombre legal, nombre comercial, RUC, horario de atención (texto), hora de apertura y cierre; no se pueden agendar citas fuera de ese rango, ni desde el panel ni desde la web de reservas
+- [x] Contacto: teléfono, WhatsApp, correo y correo de respaldo para recordatorios; redes sociales
+- [x] Vista previa del comprobante en tiempo real mientras se edita (logo, datos, horario y redes)
+- [x] Guardado automático y botón Restablecer
+- [x] Preferencias: moneda, impuesto (ITBMS 7%), colores del dashboard, tipografía
+- [x] (selector en Ventas/Caja/Inventario: Fase 2) Sucursales: crear y elegir sucursal activa (selector visible en Ventas, Caja e Inventario)
 
 #### Agenda (Fase 1)
 - [ ] Vistas Día, Semana y Mes, más "Resumen del día"

@@ -177,8 +177,8 @@ export const MODULOS: Modulo[] = [
     fase: 1,
     permiso: "configuracion",
     hijos: [
-      { nombre: "Datos del negocio", slug: "negocio", fase: 1 },
-      { nombre: "Preferencias", slug: "preferencias", fase: 1 },
+      { nombre: "Datos del negocio", slug: "negocio", fase: 1, listo: true },
+      { nombre: "Preferencias", slug: "preferencias", fase: 1, listo: true },
     ],
   },
 ];
