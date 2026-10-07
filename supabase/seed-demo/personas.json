@@ -1,0 +1,93 @@
+{
+  "_nota": "Datos ficticios de prueba (solo proyecto de desarrollo). Las fotos son generadas por IA: estas personas no existen.",
+  "empleados": [
+    { "id": "e01", "nombre": "Mariela", "apellido": "Castillo", "genero": "F", "edad": 41, "rol": "admin", "especialidad": "Gerente del salón", "comision": 0, "reservas_web": false, "acceso": true, "color": "#C9A15B",
+      "foto": "41-year-old Panamanian woman, shoulder-length dark brown hair, elegant black blazer, confident smile" },
+    { "id": "e02", "nombre": "Daniela", "apellido": "Herrera", "genero": "F", "edad": 26, "rol": "recepcion", "especialidad": "Recepcionista", "comision": 0, "reservas_web": false, "acceso": true, "color": "#8E7DBE",
+      "foto": "26-year-old Panamanian woman with curly black hair in a ponytail, black polo shirt, warm smile" },
+    { "id": "e03", "nombre": "Carlos", "apellido": "Méndez", "genero": "M", "edad": 32, "rol": "estilista", "especialidad": "Barbero", "comision": 40, "reservas_web": true, "acceso": true, "color": "#2E86AB",
+      "foto": "32-year-old Afro-Panamanian man with a sharp fade haircut and trimmed beard, black barber apron over a white t-shirt" },
+    { "id": "e04", "nombre": "Ana Lucía", "apellido": "Ríos", "genero": "F", "edad": 35, "rol": "estilista", "especialidad": "Estilista y colorista", "comision": 35, "reservas_web": true, "acceso": true, "color": "#D1495B",
+      "foto": "35-year-old Latina woman with long balayage hair, black stylist apron, friendly expression" },
+    { "id": "e05", "nombre": "Ricardo", "apellido": "Pinzón", "genero": "M", "edad": 29, "rol": "estilista", "especialidad": "Estilista de cabello", "comision": 35, "reservas_web": true, "acceso": false, "color": "#00798C",
+      "foto": "29-year-old Latino man with medium-length wavy styled hair, black shirt, slight smile" },
+    { "id": "e06", "nombre": "Sofía", "apellido": "Delgado", "genero": "F", "edad": 24, "rol": "estilista", "especialidad": "Manicurista y pedicurista", "comision": 30, "reservas_web": true, "acceso": true, "color": "#EDAE49",
+      "foto": "24-year-old Panamanian woman with straight black hair in a bun, black salon uniform, cheerful smile" },
+    { "id": "e07", "nombre": "Valeria", "apellido": "Núñez", "genero": "F", "edad": 38, "rol": "estilista", "especialidad": "Cosmetóloga y pestañista", "comision": 30, "reservas_web": true, "acceso": true, "color": "#6A994E",
+      "foto": "38-year-old Latina woman with hair tied back neatly, white aesthetician tunic, calm professional look" },
+    { "id": "e08", "nombre": "Kevin", "apellido": "Araúz", "genero": "M", "edad": 21, "rol": "asistente", "especialidad": "Asistente de salón", "comision": 5, "reservas_web": false, "acceso": true, "color": "#7D8491",
+      "foto": "21-year-old Panamanian man with short curly hair, black salon t-shirt, shy smile" }
+  ],
+  "clientes": [
+    { "id": "c01", "nombre": "Gabriela", "apellido": "Sánchez", "genero": "F", "nacimiento": "1992-03-14", "telefono": "+507 6612-4580", "tratamiento": "acne",
+      "foto": "33-year-old Latina woman with long dark hair, casual blouse" },
+    { "id": "c02", "nombre": "Luis", "apellido": "Batista", "genero": "M", "nacimiento": "1983-07-02", "telefono": "+507 6745-1123", "tratamiento": "capilar",
+      "foto": "42-year-old Panamanian man with short dark hair, button-up shirt" },
+    { "id": "c03", "nombre": "Carolina", "apellido": "Vega", "genero": "F", "nacimiento": "1997-10-21", "telefono": "+507 6230-9917", "tratamiento": "manchas",
+      "foto": "28-year-old Latina woman with wavy brown hair, light sweater" },
+    { "id": "c04", "nombre": "Patricia", "apellido": "Morales", "genero": "F", "nacimiento": "1980-12-05", "telefono": "+507 6901-3344", "tratamiento": "keratina",
+      "foto": "45-year-old Panamanian woman with shoulder-length hair, elegant blouse" },
+    { "id": "c05", "nombre": "Andrés", "apellido": "Quintero", "genero": "M", "nacimiento": "1995-05-30", "telefono": "+507 6378-2201",
+      "foto": "30-year-old Afro-Panamanian man with a short beard, polo shirt" },
+    { "id": "c06", "nombre": "María José", "apellido": "Guerra", "genero": "F", "nacimiento": "2001-02-11", "telefono": "+507 6455-7810",
+      "foto": "24-year-old Latina woman with straight long black hair, tank top" },
+    { "id": "c07", "nombre": "Jorge", "apellido": "Samaniego", "genero": "M", "nacimiento": "1966-09-18", "telefono": "+507 6822-0456",
+      "foto": "59-year-old Panamanian man with grey hair and glasses, collared shirt" },
+    { "id": "c08", "nombre": "Isabel", "apellido": "Cedeño", "genero": "F", "nacimiento": "1988-04-25", "telefono": "+507 6119-6632",
+      "foto": "37-year-old Panamanian woman with short pixie haircut, simple t-shirt" },
+    { "id": "c09", "nombre": "Diego", "apellido": "Tejada", "genero": "M", "nacimiento": "2004-11-08", "telefono": "+507 6587-3390",
+      "foto": "21-year-old Latino man with curly hair, hoodie" },
+    { "id": "c10", "nombre": "Rosa", "apellido": "Jaén", "genero": "F", "nacimiento": "1960-06-12", "telefono": "+507 6290-1178",
+      "foto": "65-year-old Panamanian woman with silver short hair, floral blouse" },
+    { "id": "c11", "nombre": "Fernando", "apellido": "Arosemena", "genero": "M", "nacimiento": "1978-01-27", "telefono": "+507 6733-5025",
+      "foto": "47-year-old Panamanian man, bald with a goatee, linen shirt" },
+    { "id": "c12", "nombre": "Natalia", "apellido": "Pérez", "genero": "F", "nacimiento": "1999-08-03", "telefono": "+507 6044-8261",
+      "foto": "26-year-old Afro-Latina woman with natural curly hair, colorful top" },
+    { "id": "c13", "nombre": "Miguel", "apellido": "De León", "genero": "M", "nacimiento": "1990-03-29", "telefono": "+507 6961-2475",
+      "foto": "35-year-old Latino man with neat side-part haircut, t-shirt" },
+    { "id": "c14", "nombre": "Lucía", "apellido": "Rodríguez", "genero": "F", "nacimiento": "1985-10-17", "telefono": "+507 6508-7743",
+      "foto": "40-year-old Latina woman with highlighted bob haircut, blazer" },
+    { "id": "c15", "nombre": "Alejandro", "apellido": "Chen", "genero": "M", "nacimiento": "1993-12-22", "telefono": "+507 6376-9104",
+      "foto": "32-year-old Chinese-Panamanian man with short black hair, casual shirt" },
+    { "id": "c16", "nombre": "Valentina", "apellido": "Osorio", "genero": "F", "nacimiento": "2006-05-09", "telefono": "+507 6215-0089",
+      "foto": "19-year-old Latina woman with long wavy hair, denim jacket" },
+    { "id": "c17", "nombre": "Roberto", "apellido": "Ortega", "genero": "M", "nacimiento": "1971-08-14", "telefono": "+507 6840-3367",
+      "foto": "54-year-old Panamanian man with salt-and-pepper hair and mustache, guayabera shirt" },
+    { "id": "c18", "nombre": "Camila", "apellido": "Fuentes", "genero": "F", "nacimiento": "1994-02-28", "telefono": "+507 6697-5512",
+      "foto": "31-year-old Latina woman with straight auburn-dyed hair, sleeveless blouse" },
+    { "id": "c19", "nombre": "Eduardo", "apellido": "Vásquez", "genero": "M", "nacimiento": "1987-06-06", "telefono": "+507 6154-2238",
+      "foto": "38-year-old Afro-Panamanian man with short twists hairstyle, t-shirt" },
+    { "id": "c20", "nombre": "Daniela", "apellido": "Ruiz", "genero": "F", "nacimiento": "1976-09-01", "telefono": "+507 6429-6670",
+      "foto": "49-year-old Latina woman with layered medium hair, cardigan" }
+  ],
+  "tratamientos": [
+    { "cliente": "c01", "clave": "acne", "procedimiento": "Tratamiento facial para acné", "profesional": "e07", "sesiones": 6, "frecuencia_dias": 14, "precio_sesion": 45,
+      "etapas": [
+        "close-up face photo with moderate inflammatory acne on cheeks and forehead, clinical before photo, neutral background",
+        "same woman, same framing and lighting, acne visibly reduced by about 40 percent, some redness remaining",
+        "same woman, same framing and lighting, acne mostly cleared, only faint marks remaining",
+        "same woman, same framing and lighting, clear smooth skin, healthy glow, after photo"
+      ] },
+    { "cliente": "c02", "clave": "capilar", "procedimiento": "Tratamiento capilar anticaída", "profesional": "e04", "sesiones": 8, "frecuencia_dias": 14, "precio_sesion": 55,
+      "etapas": [
+        "top-down photo of the man's head showing thinning hair at the crown, clinical before photo",
+        "same man, same top-down framing and lighting, slightly denser hair at the crown",
+        "same man, same top-down framing and lighting, noticeably denser hair at the crown",
+        "same man, same top-down framing and lighting, full healthy hair density at the crown, after photo"
+      ] },
+    { "cliente": "c03", "clave": "manchas", "procedimiento": "Despigmentación de manchas (melasma)", "profesional": "e07", "sesiones": 6, "frecuencia_dias": 21, "precio_sesion": 60,
+      "etapas": [
+        "close-up face photo showing brown melasma patches on cheeks and upper lip, clinical before photo, neutral background",
+        "same woman, same framing and lighting, melasma patches slightly lighter",
+        "same woman, same framing and lighting, melasma patches much lighter",
+        "same woman, same framing and lighting, even skin tone with almost no visible patches, after photo"
+      ] },
+    { "cliente": "c04", "clave": "keratina", "procedimiento": "Reconstrucción capilar con keratina", "profesional": "e04", "sesiones": 4, "frecuencia_dias": 30, "precio_sesion": 85,
+      "etapas": [
+        "photo from behind of the woman's shoulder-length hair, very frizzy, dry and damaged with split ends, before photo",
+        "same woman from behind, same framing and lighting, hair less frizzy and smoother",
+        "same woman from behind, same framing and lighting, hair smooth and shinier",
+        "same woman from behind, same framing and lighting, sleek glossy healthy hair, after photo"
+      ] }
+  ]
+}
