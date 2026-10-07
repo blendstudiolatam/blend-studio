@@ -57,6 +57,7 @@
 - Permisos por módulo (sesión 4): en las políticas de tablas de negocio usar `privado.puede(sucursal_id, '<modulo>', escribir)`; ya aplica los límites fijos. En la app, `requireModulo(modulo, editar)` en cada página/acción. Roles: `admin`, `recepcion`, `estilista` (se muestra "Profesional"), `asistente`.
 - Marca: `negocio` (una fila) + `public.marca_publica()` para datos públicos; `getMarca()` aplica colores y tipografías como variables CSS en `<html>`. Logo en Storage `marca` (público, solo admins escriben; el servidor lo convierte a WebP). Horario por día en `horarios_sucursal`.
 - Empleados (sesión 9): `empleados` (usuario_id opcional, solo lo enlaza el servidor), `horarios_empleado`, `bloqueos_empleado`, `empleado_servicios` (comisión por servicio opcional). Fotos en Storage `equipo` (público). Datos de prueba: `npm run seed:empleados`.
+- Clientes (sesión 10): `clientes` es global (sin `sucursal_id`); RLS con `privado.puede_alguna('clientes', escribir)`; borrar solo admin. Código visible C-0001 (`codigo`), búsqueda con `busqueda`/`telefono_digitos` (columnas generadas). Fotos en Storage `clientes` (PRIVADO, enlaces firmados de 1 hora). Importar/exportar Excel/CSV con `exceljs` (`src/lib/excel.server.ts`; el CSV exportado se protege contra fórmulas). Datos de prueba: `npm run seed:clientes`.
 - Tablas con citas, ventas o caja: trigger `privado.registrar_auditoria()`.
 - Toda tabla nueva con pruebas de permisos en `tests/rls/` (`npm run test:rls`). Las pruebas corren en transacciones que se deshacen.
 - El dueño (`perfiles.es_dueno`) es admin en todas las sucursales; solo se activa por SQL.
@@ -143,10 +144,10 @@ Marca cada punto cuando esté terminado y probado.
 - [ ] Protección anti-spam (CAPTCHA y límite de solicitudes)
 
 #### Clientes (Fase 1, salvo lo indicado)
-- [ ] Lista de clientes con indicadores: total, activos, nuevos del mes, planes activos
-- [ ] Buscador por nombre, ID o teléfono; pestañas Todos, Activo, Nuevo, Inactivo; vista tabla o tarjetas
-- [ ] Columnas: cliente (foto, ID, edad, género), contacto, última visita, planes, sesiones, total gastado, estado, acciones
-- [ ] Botones Importar (Excel/CSV), Exportar y Nuevo cliente
+- [x] (sesión 10; "planes activos" se llena con Tratamientos) Lista de clientes con indicadores: total, activos, nuevos del mes, planes activos
+- [x] Buscador por nombre, ID o teléfono; pestañas Todos, Activo, Nuevo, Inactivo; vista tabla o tarjetas
+- [x] (última visita, planes, sesiones y total gastado se llenan con Agenda, Tratamientos y Ventas) Columnas: cliente (foto, ID, edad, género), contacto, última visita, planes, sesiones, total gastado, estado, acciones
+- [x] Botones Importar (Excel/CSV), Exportar y Nuevo cliente
 - [ ] Ficha del cliente con pestañas:
   - [ ] Datos personales: foto, nombre, apellidos, fecha de nacimiento, edad, género, documento de identidad, contacto; preferencias "Recordatorios por WhatsApp" y "Permitir uso de fotos"
   - [ ] Historial médico: alergias, condiciones médicas, medicación actual (medicamento, dosis, desde), signos vitales (tipo de sangre, peso, altura, presión) y última actualización con quién la hizo

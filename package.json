@@ -9,6 +9,7 @@
     "lint": "eslint",
     "db:push": "node --env-file-if-exists=.env.local scripts/db-push.mjs",
     "db:types": "node --env-file-if-exists=.env.local scripts/db-types.mjs",
+    "seed:clientes": "node --env-file-if-exists=.env.local scripts/seed-demo-clientes.mjs",
     "seed:empleados": "node --env-file-if-exists=.env.local scripts/seed-demo-empleados.mjs",
     "seed:servicios": "node --env-file-if-exists=.env.local scripts/seed-demo-servicios.mjs",
     "seed:usuarios": "node --env-file-if-exists=.env.local scripts/seed-demo-usuarios.mjs",
@@ -17,6 +18,7 @@
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.2",
+    "exceljs": "^4.4.0",
     "lucide-react": "^1.52.0",
     "next": "16.3.8",
     "react": "19.2.8",
@@ -37,5 +39,8 @@
     "supabase": "^2.120.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
   }
 }

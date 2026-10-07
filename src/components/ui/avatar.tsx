@@ -8,12 +8,15 @@ export function Avatar({
   tamano = 40,
   color,
   className = "",
+  privada = false,
 }: {
   nombre: string;
   foto: string | null;
   tamano?: number;
   color?: string;
   className?: string;
+  /** Enlace temporal de un archivo privado: se muestra tal cual, sin pasar por el optimizador. */
+  privada?: boolean;
 }) {
   return (
     <span
@@ -21,7 +24,7 @@ export function Avatar({
       style={{ width: tamano, height: tamano, boxShadow: color ? `0 0 0 2px ${color}` : undefined }}
     >
       {foto ? (
-        <Image src={foto} alt={nombre} fill sizes={`${tamano * 2}px`} className="object-cover" />
+        <Image src={foto} alt={nombre} fill unoptimized={privada} sizes={`${tamano * 2}px`} className="object-cover" />
       ) : (
         <span style={{ fontSize: tamano * 0.36 }}>{iniciales(nombre)}</span>
       )}

@@ -97,6 +97,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"clientes": {
+                  Row: {
+                    "activo": boolean,"apellido": string,"busqueda": string | null,"codigo": number,"creado_por": string | null,"created_at": string,"direccion": string | null,"documento": string | null,"email": string | null,"fecha_nacimiento": string | null,"foto_path": string | null,"genero": string | null,"id": string,"nombre": string,"notas": string | null,"origen": string,"permitir_fotos": boolean,"recordatorios_whatsapp": boolean,"sucursal_origen_id": string | null,"telefono": string | null,"telefono_digitos": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "activo"?: boolean,"apellido"?: string,"busqueda"?: never,"codigo"?: never,"creado_por"?: string | null,"created_at"?: string,"direccion"?: string | null,"documento"?: string | null,"email"?: string | null,"fecha_nacimiento"?: string | null,"foto_path"?: string | null,"genero"?: string | null,"id"?: string,"nombre": string,"notas"?: string | null,"origen"?: string,"permitir_fotos"?: boolean,"recordatorios_whatsapp"?: boolean,"sucursal_origen_id"?: string | null,"telefono"?: string | null,"telefono_digitos"?: never,"updated_at"?: string
+                  }
+                  Update: {
+                    "activo"?: boolean,"apellido"?: string,"busqueda"?: never,"codigo"?: never,"creado_por"?: string | null,"created_at"?: string,"direccion"?: string | null,"documento"?: string | null,"email"?: string | null,"fecha_nacimiento"?: string | null,"foto_path"?: string | null,"genero"?: string | null,"id"?: string,"nombre"?: string,"notas"?: string | null,"origen"?: string,"permitir_fotos"?: boolean,"recordatorios_whatsapp"?: boolean,"sucursal_origen_id"?: string | null,"telefono"?: string | null,"telefono_digitos"?: never,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "clientes_creado_por_fkey"
+      columns: ["creado_por"]
+isOneToOne: false
+      referencedRelation: "perfiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "clientes_sucursal_origen_id_fkey"
+      columns: ["sucursal_origen_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"empleado_servicios": {
                   Row: {
                     "comision_pct": number | null,"empleado_id": string,"servicio_id": string,"sucursal_id": string

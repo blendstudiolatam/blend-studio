@@ -23,6 +23,8 @@ const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Se usa tal cual en el servidor (importar y exportar Excel).
+  serverExternalPackages: ["exceljs"],
   images: {
     // Solo imágenes públicas (marca y fotos del equipo) de nuestro proyecto de Supabase.
     remotePatterns: supabaseHost
