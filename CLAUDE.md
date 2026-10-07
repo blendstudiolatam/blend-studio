@@ -56,6 +56,7 @@
 - Cada tabla nueva: `revoke all ... from anon, authenticated`, luego `grant` solo lo necesario (por columna si aplica), `enable row level security` y políticas usando las funciones de `privado` (`tiene_acceso`, `tiene_rol`, `es_admin`, `es_dueno`).
 - Permisos por módulo (sesión 4): en las políticas de tablas de negocio usar `privado.puede(sucursal_id, '<modulo>', escribir)`; ya aplica los límites fijos. En la app, `requireModulo(modulo, editar)` en cada página/acción. Roles: `admin`, `recepcion`, `estilista` (se muestra "Profesional"), `asistente`.
 - Marca: `negocio` (una fila) + `public.marca_publica()` para datos públicos; `getMarca()` aplica colores y tipografías como variables CSS en `<html>`. Logo en Storage `marca` (público, solo admins escriben; el servidor lo convierte a WebP). Horario por día en `horarios_sucursal`.
+- Empleados (sesión 9): `empleados` (usuario_id opcional, solo lo enlaza el servidor), `horarios_empleado`, `bloqueos_empleado`, `empleado_servicios` (comisión por servicio opcional). Fotos en Storage `equipo` (público). Datos de prueba: `npm run seed:empleados`.
 - Tablas con citas, ventas o caja: trigger `privado.registrar_auditoria()`.
 - Toda tabla nueva con pruebas de permisos en `tests/rls/` (`npm run test:rls`). Las pruebas corren en transacciones que se deshacen.
 - El dueño (`perfiles.es_dueno`) es admin en todas las sucursales; solo se activa por SQL.
@@ -169,10 +170,10 @@ Marca cada punto cuando esté terminado y probado.
 - [x] (cargadas con datos de prueba: npm run seed:servicios) Categorías iniciales sugeridas: Barbería, Cabello, Uñas, Pestañas, Manicure, Pedicure, Facial, Corporal, Depilación, Spa (editables)
 
 #### Personal (Fase 1, salvo lo indicado)
-- [ ] Empleados en tarjetas: foto, nombre, especialidad, rol, estado, contacto, horario y porcentaje de comisión
-- [ ] Indicadores: total, activos, profesionales, en vacaciones; filtros Profesional, Recepción, Asistente
-- [ ] Formulario de empleado: foto, nombre, correo, teléfono, rol (Administrador, Profesional, Recepción, Asistente), especialidad, horario, comisión %, estado (Activo, Vacaciones, Inactivo), "Recibe reservas desde la web", color de etiqueta en la agenda, acceso al sistema sí/no
-- [ ] Botón Rendimiento por empleado
+- [x] (sesión 9) Empleados en tarjetas: foto, nombre, especialidad, rol, estado, contacto, horario y porcentaje de comisión
+- [x] Indicadores: total, activos, profesionales, en vacaciones; filtros Profesional, Recepción, Asistente
+- [x] (más horario semanal, vacaciones/días libres y servicios que realiza con comisión por servicio) Formulario de empleado: foto, nombre, correo, teléfono, rol (Administrador, Profesional, Recepción, Asistente), especialidad, horario, comisión %, estado (Activo, Vacaciones, Inactivo), "Recibe reservas desde la web", color de etiqueta en la agenda, acceso al sistema sí/no
+- [ ] (pestaña creada; se llena con Agenda/Ventas) Botón Rendimiento por empleado
 - [x] (sesiones 4 y 5) Usuarios: lista con rol y usuario; permisos por módulo (Agenda, Personal, Clientes, Servicios, Productos, Reportes, Configuración, Caja, Ventas, Finanzas) con niveles Acceso total, Solo lectura y Sin acceso; matriz global de permisos por rol
 - [ ] Servicios del personal (Fase 2): registros enviados por los empleados desde su app; estados Pendiente, Validado, Rechazado; filtros Hoy, Semana, Quincena, Mes y Personalizado; columnas fecha, profesional, cliente, servicios, productos, pago, total, comisión, ajuste (+), descuento (−) y validar; al validar se actualizan inventario, caja y comisiones; resumen por profesional con comisión liquidada
 - [ ] App del trabajador (Fase 2, vista móvil instalable): resumen del día (ventas, citas, pendientes, comisión) y asistente "Registrar nueva venta" paso a paso: cliente, servicios, productos, pago, resumen con su comisión; queda pendiente de validación

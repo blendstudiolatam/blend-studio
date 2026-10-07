@@ -24,9 +24,12 @@ const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
-    // Solo imágenes públicas del almacenamiento de la marca en nuestro proyecto de Supabase.
+    // Solo imágenes públicas (marca y fotos del equipo) de nuestro proyecto de Supabase.
     remotePatterns: supabaseHost
-      ? [{ protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/marca/**" }]
+      ? [
+          { protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/marca/**" },
+          { protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/equipo/**" },
+        ]
       : [],
   },
   experimental: {

@@ -95,7 +95,7 @@ export const MODULOS: Modulo[] = [
     fase: 1,
     permiso: "personal",
     hijos: [
-      { nombre: "Empleados", slug: "empleados", fase: 1 },
+      { nombre: "Empleados", slug: "empleados", fase: 1, listo: true },
       { nombre: "Usuarios", slug: "usuarios", fase: 1, listo: true, soloAdmin: true },
       { nombre: "Servicios del personal", slug: "servicios", fase: 2 },
     ],

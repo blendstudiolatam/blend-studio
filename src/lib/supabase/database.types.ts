@@ -51,6 +51,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"bloqueos_empleado": {
+                  Row: {
+                    "created_at": string,"desde": string,"empleado_id": string,"hasta": string,"id": string,"motivo": string,"sucursal_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"desde": string,"empleado_id": string,"hasta": string,"id"?: string,"motivo"?: string,"sucursal_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"desde"?: string,"empleado_id"?: string,"hasta"?: string,"id"?: string,"motivo"?: string,"sucursal_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "bloqueos_empleado_empleado_id_fkey"
+      columns: ["empleado_id"]
+isOneToOne: false
+      referencedRelation: "empleados"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "bloqueos_empleado_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"categorias_servicio": {
                   Row: {
                     "activa": boolean,"created_at": string,"descripcion": string | null,"id": string,"imagen": string | null,"nombre": string,"orden": number,"sucursal_id": string,"updated_at": string
@@ -65,6 +91,90 @@ isOneToOne: false
                   Relationships: [
                     {
       foreignKeyName: "categorias_servicio_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"empleado_servicios": {
+                  Row: {
+                    "comision_pct": number | null,"empleado_id": string,"servicio_id": string,"sucursal_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "comision_pct"?: number | null,"empleado_id": string,"servicio_id": string,"sucursal_id": string
+                  }
+                  Update: {
+                    "comision_pct"?: number | null,"empleado_id"?: string,"servicio_id"?: string,"sucursal_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "empleado_servicios_empleado_id_fkey"
+      columns: ["empleado_id"]
+isOneToOne: false
+      referencedRelation: "empleados"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "empleado_servicios_servicio_id_fkey"
+      columns: ["servicio_id"]
+isOneToOne: false
+      referencedRelation: "servicios"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "empleado_servicios_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"empleados": {
+                  Row: {
+                    "apellido": string,"color": string,"comision_pct": number,"created_at": string,"email": string | null,"especialidad": string | null,"estado": Database["public"]['Enums']["estado_empleado"],"foto_path": string | null,"id": string,"nombre": string,"orden": number,"reserva_web": boolean,"rol": Database["public"]['Enums']["rol_usuario"],"sucursal_id": string,"telefono": string | null,"updated_at": string,"usuario_id": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "apellido"?: string,"color"?: string,"comision_pct"?: number,"created_at"?: string,"email"?: string | null,"especialidad"?: string | null,"estado"?: Database["public"]['Enums']["estado_empleado"],"foto_path"?: string | null,"id"?: string,"nombre": string,"orden"?: number,"reserva_web"?: boolean,"rol"?: Database["public"]['Enums']["rol_usuario"],"sucursal_id": string,"telefono"?: string | null,"updated_at"?: string,"usuario_id"?: string | null
+                  }
+                  Update: {
+                    "apellido"?: string,"color"?: string,"comision_pct"?: number,"created_at"?: string,"email"?: string | null,"especialidad"?: string | null,"estado"?: Database["public"]['Enums']["estado_empleado"],"foto_path"?: string | null,"id"?: string,"nombre"?: string,"orden"?: number,"reserva_web"?: boolean,"rol"?: Database["public"]['Enums']["rol_usuario"],"sucursal_id"?: string,"telefono"?: string | null,"updated_at"?: string,"usuario_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "empleados_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "empleados_usuario_id_fkey"
+      columns: ["usuario_id"]
+isOneToOne: false
+      referencedRelation: "perfiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"horarios_empleado": {
+                  Row: {
+                    "dia_semana": number,"empleado_id": string,"entrada": string,"id": string,"salida": string,"sucursal_id": string,"trabaja": boolean
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "dia_semana": number,"empleado_id": string,"entrada"?: string,"id"?: string,"salida"?: string,"sucursal_id": string,"trabaja"?: boolean
+                  }
+                  Update: {
+                    "dia_semana"?: number,"empleado_id"?: string,"entrada"?: string,"id"?: string,"salida"?: string,"sucursal_id"?: string,"trabaja"?: boolean
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "horarios_empleado_empleado_id_fkey"
+      columns: ["empleado_id"]
+isOneToOne: false
+      referencedRelation: "empleados"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "horarios_empleado_sucursal_id_fkey"
       columns: ["sucursal_id"]
 isOneToOne: false
       referencedRelation: "sucursales"
@@ -223,7 +333,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "modulo_app": "agenda"|"clientes"|"servicios"|"personal"|"productos"|"ventas"|"caja"|"finanzas"|"reportes"|"configuracion","nivel_permiso": "ninguno"|"lectura"|"total","rol_usuario": "admin"|"recepcion"|"estilista"|"asistente"
+            "estado_empleado": "activo"|"vacaciones"|"inactivo","modulo_app": "agenda"|"clientes"|"servicios"|"personal"|"productos"|"ventas"|"caja"|"finanzas"|"reportes"|"configuracion","nivel_permiso": "ninguno"|"lectura"|"total","rol_usuario": "admin"|"recepcion"|"estilista"|"asistente"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -339,7 +449,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "modulo_app": ["agenda", "clientes", "servicios", "personal", "productos", "ventas", "caja", "finanzas", "reportes", "configuracion"],"nivel_permiso": ["ninguno", "lectura", "total"],"rol_usuario": ["admin", "recepcion", "estilista", "asistente"]
+            "estado_empleado": ["activo", "vacaciones", "inactivo"],"modulo_app": ["agenda", "clientes", "servicios", "personal", "productos", "ventas", "caja", "finanzas", "reportes", "configuracion"],"nivel_permiso": ["ninguno", "lectura", "total"],"rol_usuario": ["admin", "recepcion", "estilista", "asistente"]
           }
         }
 } as const

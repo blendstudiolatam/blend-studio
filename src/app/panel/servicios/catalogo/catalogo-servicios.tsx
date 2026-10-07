@@ -6,6 +6,8 @@ import { Encabezado, Indicador } from "@/components/panel/encabezado";
 import { Boton } from "@/components/ui/boton";
 import { Dialogo } from "@/components/ui/dialogo";
 import { MensajeError } from "@/components/ui/mensaje-error";
+import { Avatar } from "@/components/ui/avatar";
+import { urlFotoEmpleado } from "@/lib/empleados";
 import { ahorro, dinero, duracion } from "@/lib/formato";
 import { cambiarEstadoServicio, eliminarServicio, guardarServicio, type Resultado } from "../actions";
 
@@ -22,14 +24,18 @@ export type Servicio = {
 };
 type Categoria = { id: string; nombre: string; activa: boolean };
 
+type Profesional = { id: string; nombre: string; fotoPath: string | null; color: string };
+
 export function CatalogoServicios({
   categorias,
   servicios,
+  profesionales,
   categoriaInicial,
   editable,
 }: {
   categorias: Categoria[];
   servicios: Servicio[];
+  profesionales: Record<string, Profesional[]>;
   categoriaInicial: string | null;
   editable: boolean;
 }) {
@@ -124,9 +130,7 @@ export function CatalogoServicios({
 
       {resultado?.ok && <p className="text-sm text-emerald-700" role="status">{resultado.ok}</p>}
       <MensajeError>{resultado?.error}</MensajeError>
-      <p className="text-xs text-muted">
-        Qué profesional realiza cada servicio se asigna en Personal → Empleados (próxima sesión).
-      </p>
+      <p className="text-xs text-muted">Quién realiza cada servicio se asigna en Personal → Empleados.</p>
 
       <div className={`space-y-6 ${pendiente ? "opacity-60" : ""}`}>
         {categorias
@@ -141,7 +145,7 @@ export function CatalogoServicios({
                   <span className="text-xs text-muted">{lista.length} servicios</span>
                 </h2>
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[720px] text-left text-sm">
+                  <table className="w-full min-w-[820px] text-left text-sm">
                     <thead className="text-[11px] uppercase tracking-[0.12em] text-muted">
                       <tr>
                         <th className="px-5 py-2.5 font-medium">Servicio</th>
@@ -149,6 +153,7 @@ export function CatalogoServicios({
                         <th className="px-3 py-2.5 text-right font-medium">Precio de lista</th>
                         <th className="px-3 py-2.5 text-right font-medium">Con descuento</th>
                         <th className="px-3 py-2.5 text-right font-medium">Ahorro</th>
+                        <th className="px-3 py-2.5 font-medium">Lo realiza</th>
                         <th className="px-3 py-2.5 font-medium">Reserva web</th>
                         <th className="px-3 py-2.5 font-medium">Estado</th>
                         {editable && <th className="px-5 py-2.5" />}
@@ -176,6 +181,14 @@ export function CatalogoServicios({
                               ) : (
                                 "—"
                               )}
+                            </td>
+                            <td className="px-3 py-2.5">
+                              <div className="flex -space-x-2" title={(profesionales[s.id] ?? []).map((p) => p.nombre).join(", ")}>
+                                {(profesionales[s.id] ?? []).slice(0, 4).map((p) => (
+                                  <Avatar key={p.id} nombre={p.nombre} foto={urlFotoEmpleado(p.fotoPath)} tamano={26} className="ring-2 ring-surface" />
+                                ))}
+                                {!profesionales[s.id]?.length && <span className="text-xs text-muted">Sin asignar</span>}
+                              </div>
                             </td>
                             <td className="px-3 py-2.5">
                               <button
@@ -232,7 +245,7 @@ export function CatalogoServicios({
                       })}
                       {lista.length === 0 && (
                         <tr>
-                          <td colSpan={8} className="px-5 py-6 text-center text-sm text-muted">
+                          <td colSpan={9} className="px-5 py-6 text-center text-sm text-muted">
                             Sin servicios en esta categoría.
                           </td>
                         </tr>
