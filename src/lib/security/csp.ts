@@ -15,13 +15,16 @@ export function buildCsp(nonce: string, supabaseUrl: string | null): string {
 
   const directives = [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""}`,
+    // https://challenges.cloudflare.com: respaldo para navegadores sin strict-dynamic (CAPTCHA).
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://challenges.cloudflare.com${isDev ? " 'unsafe-eval'" : ""}`,
     // Estilos en línea permitidos: los usan next/image y la agenda (posición de citas).
     // El riesgo real (scripts) sigue bloqueado por script-src con nonce.
     "style-src 'self' 'unsafe-inline'",
     `img-src ${img.join(" ")}`,
     "font-src 'self'",
     `connect-src ${connect.join(" ")}`,
+    // CAPTCHA de Cloudflare (Turnstile) en la página de reservas.
+    "frame-src https://challenges.cloudflare.com",
     "worker-src 'self'",
     "manifest-src 'self'",
     "object-src 'none'",

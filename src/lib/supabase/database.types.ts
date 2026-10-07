@@ -149,14 +149,14 @@ isOneToOne: false
                   ]
                 },"clientes": {
                   Row: {
-                    "activo": boolean,"apellido": string,"busqueda": string | null,"codigo": number,"creado_por": string | null,"created_at": string,"direccion": string | null,"documento": string | null,"email": string | null,"fecha_nacimiento": string | null,"foto_path": string | null,"genero": string | null,"id": string,"nombre": string,"notas": string | null,"origen": string,"permitir_fotos": boolean,"recordatorios_whatsapp": boolean,"sucursal_origen_id": string | null,"telefono": string | null,"telefono_digitos": string | null,"updated_at": string
+                    "activo": boolean,"apellido": string,"busqueda": string | null,"codigo": number,"consentimiento_datos_at": string | null,"creado_por": string | null,"created_at": string,"direccion": string | null,"documento": string | null,"email": string | null,"fecha_nacimiento": string | null,"foto_path": string | null,"genero": string | null,"id": string,"nombre": string,"notas": string | null,"origen": string,"permitir_fotos": boolean,"recordatorios_whatsapp": boolean,"sucursal_origen_id": string | null,"telefono": string | null,"telefono_digitos": string | null,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "activo"?: boolean,"apellido"?: string,"busqueda"?: never,"codigo"?: never,"creado_por"?: string | null,"created_at"?: string,"direccion"?: string | null,"documento"?: string | null,"email"?: string | null,"fecha_nacimiento"?: string | null,"foto_path"?: string | null,"genero"?: string | null,"id"?: string,"nombre": string,"notas"?: string | null,"origen"?: string,"permitir_fotos"?: boolean,"recordatorios_whatsapp"?: boolean,"sucursal_origen_id"?: string | null,"telefono"?: string | null,"telefono_digitos"?: never,"updated_at"?: string
+                    "activo"?: boolean,"apellido"?: string,"busqueda"?: never,"codigo"?: never,"consentimiento_datos_at"?: string | null,"creado_por"?: string | null,"created_at"?: string,"direccion"?: string | null,"documento"?: string | null,"email"?: string | null,"fecha_nacimiento"?: string | null,"foto_path"?: string | null,"genero"?: string | null,"id"?: string,"nombre": string,"notas"?: string | null,"origen"?: string,"permitir_fotos"?: boolean,"recordatorios_whatsapp"?: boolean,"sucursal_origen_id"?: string | null,"telefono"?: string | null,"telefono_digitos"?: never,"updated_at"?: string
                   }
                   Update: {
-                    "activo"?: boolean,"apellido"?: string,"busqueda"?: never,"codigo"?: never,"creado_por"?: string | null,"created_at"?: string,"direccion"?: string | null,"documento"?: string | null,"email"?: string | null,"fecha_nacimiento"?: string | null,"foto_path"?: string | null,"genero"?: string | null,"id"?: string,"nombre"?: string,"notas"?: string | null,"origen"?: string,"permitir_fotos"?: boolean,"recordatorios_whatsapp"?: boolean,"sucursal_origen_id"?: string | null,"telefono"?: string | null,"telefono_digitos"?: never,"updated_at"?: string
+                    "activo"?: boolean,"apellido"?: string,"busqueda"?: never,"codigo"?: never,"consentimiento_datos_at"?: string | null,"creado_por"?: string | null,"created_at"?: string,"direccion"?: string | null,"documento"?: string | null,"email"?: string | null,"fecha_nacimiento"?: string | null,"foto_path"?: string | null,"genero"?: string | null,"id"?: string,"nombre"?: string,"notas"?: string | null,"origen"?: string,"permitir_fotos"?: boolean,"recordatorios_whatsapp"?: boolean,"sucursal_origen_id"?: string | null,"telefono"?: string | null,"telefono_digitos"?: never,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -628,6 +628,14 @@ isOneToOne: false
               "nombre": string,"path": string,"tipo": string
             }[]
                            },
+"crear_reserva_web":
+{ Args: { "p_apellido": string,"p_email": string,"p_empleado": string,"p_fecha": string,"p_hora": string,"p_nombre": string,"p_notas": string,"p_servicio": string,"p_slug": string,"p_telefono": string }; Returns: Json
+                           },
+"datos_privacidad":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "direccion": string,"dv": string,"email": string,"nombre_comercial": string,"nombre_legal": string,"ruc": string,"telefono": string,"whatsapp": string
+            }[]
+                           },
 "documentos_de_cliente":
 { Args: { "p_cliente": string }; Returns: {
               "categoria": Database["public"]['Enums']["categoria_documento"],"created_at": string,"id": string,"nombre": string,"plan_id": string,"subido_por_nombre": string,"tamano": number,"tipo": string
@@ -663,6 +671,22 @@ isOneToOne: false
 "registrar_documento":
 { Args: { "p_categoria": Database["public"]['Enums']["categoria_documento"],"p_cliente": string,"p_nombre": string,"p_plan"?: string,"p_tamano": number,"p_tipo": string }; Returns: {
               "id": string,"path": string
+            }[]
+                           },
+"reserva_catalogo":
+{ Args: { "p_slug": string }; Returns: Json
+                           },
+"reserva_horarios":
+{ Args: { "p_empleado": string,"p_fecha": string,"p_servicio": string,"p_slug": string }; Returns: {
+              "hora": string
+            }[]
+                           },
+"reserva_permitida":
+{ Args: { "p_clave_hash"?: string,"p_ip_hash": string,"p_tipo": string }; Returns: boolean
+                           },
+"reserva_sucursales":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "direccion": string,"nombre": string,"slug": string
             }[]
                            },
 "ver_historial_medico":

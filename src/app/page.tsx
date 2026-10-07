@@ -21,14 +21,22 @@ export default async function Home() {
       <Wordmark className="text-[15px] sm:text-[18px]" />
 
       <p className="mt-12 max-w-sm text-center text-sm text-ivory/70">
-        Muy pronto podrás reservar tu cita en línea.
+        Reserva tu cita en línea, las 24 horas.
       </p>
 
       <Link
-        href="/entrar"
-        className="mt-8 rounded-full border border-gold px-8 py-3 text-xs uppercase tracking-[0.25em] text-gold transition hover:bg-gold hover:text-ink"
+        href="/reservar"
+        className="mt-8 rounded-full bg-gold px-10 py-3.5 text-xs font-medium uppercase tracking-[0.25em] text-ink transition hover:bg-ivory"
       >
-        Entrar al sistema
+        Reservar cita
+      </Link>
+
+      <Link href="/entrar" className="mt-6 text-[11px] uppercase tracking-[0.25em] text-ivory/50 transition hover:text-gold">
+        Entrar al sistema (equipo)
+      </Link>
+
+      <Link href="/privacidad" className="mt-10 text-[11px] text-ivory/40 underline hover:text-ivory/70">
+        Política de privacidad
       </Link>
 
       {status && (

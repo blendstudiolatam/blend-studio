@@ -61,6 +61,7 @@
 - Salud del cliente (sesiones 11-12): `historial_medico`, `medicamentos_cliente`, `documentos_cliente` SIN acceso directo (política using false); todo por funciones `public.ver_historial_medico`, `guardar_historial_medico`, `documentos_de_cliente`, `registrar_documento`, `abrir_documento`, `eliminar_documento`, que verifican `privado.puede_ver_salud`/`puede_editar_salud` y escriben en `consultas_salud` (lo ve solo admin). Sin consentimiento no se guardan datos (check en la tabla). Archivos en Storage `documentos` (privado, sin políticas): solo el servidor sube y firma enlaces de 5 minutos tras la autorización. Datos de prueba: `npm run seed:salud`.
 - Tratamientos (sesión 13): `paquetes` (catálogo por sucursal; precios los gestiona Servicios total), `planes_tratamiento` y `sesiones_tratamiento` (por sucursal; Clientes). Las sesiones las crea el trigger `privado.sincronizar_sesiones` según la frecuencia; el plan pasa solo a completado al terminar. Fotos de avance = `documentos_cliente.plan_id`. Recordatorio manual por enlace de WhatsApp con el mensaje listo. **Pendiente en Fase 2:** marcar "pagada" desde el POS. Datos de prueba: `npm run seed:tratamientos`.
 - Agenda (sesiones 14-16): `citas` (por sucursal; no se borran, se cancelan). Reglas en el trigger `privado.validar_cita` (horario del salón, del profesional, días libres; mensajes en español con errcode P0001) y la restricción `citas_sin_cruce` (btree_gist; 23P01). Hora de Panamá fija UTC-5 (`src/lib/agenda.ts`). El profesional ve y edita solo su agenda (`privado.ve_agenda_de` / `edita_agenda_de`) y ve el historial médico de sus clientes con cita. Una cita con `sesion_id` actualiza su sesión de tratamiento. `config_recordatorios` por sucursal (solo admin; el envío llega en Fase 3). Las reservas web entrarán con `origen = web` por una función del servidor (sesiones 17-18). Datos de prueba: `npm run seed:citas`.
+- Reservas web (sesiones 17-18): páginas públicas `/reservar`, `/reservar/[slug]` y `/privacidad`. El público no toca tablas: el servidor llama con la clave secreta a `reserva_catalogo`, `reserva_horarios` (usa `privado.horarios_libres`: 15 min, mínimo 2 h de anticipación, máximo 60 días) y `crear_reserva_web` (cita pendiente, origen web; reconoce al cliente por los últimos 8 dígitos del teléfono sin cambiar sus datos; guarda `clientes.consentimiento_datos_at`). Antes: Cloudflare Turnstile (`src/lib/turnstile.server.ts`; claves de prueba en desarrollo, obligatorias en producción: `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`) y `reserva_permitida` (120 consultas/h por IP; 5 reservas/h por IP; 3/día por teléfono). La política de privacidad es un texto base: que la revise un abogado antes de producción.
 - Tablas con citas, ventas o caja: trigger `privado.registrar_auditoria()`.
 - Toda tabla nueva con pruebas de permisos en `tests/rls/` (`npm run test:rls`). Las pruebas corren en transacciones que se deshacen.
 - El dueño (`perfiles.es_dueno`) es admin en todas las sucursales; solo se activa por SQL.
@@ -139,12 +140,12 @@ Marca cada punto cuando esté terminado y probado.
 - [x] (configuración guardada; el envío real llega en Fase 3) Panel "Recordatorios automáticos": activo o no, canales (WhatsApp y correo), aviso principal (por ejemplo 1 día antes) y seguimiento (por ejemplo 2 horas antes), configurables
 
 #### Reservas web públicas (Fase 1)
-- [ ] Página "Reserva tu cita" con la marca del salón
-- [ ] Paso 1: servicio, filtrado por categoría
-- [ ] Paso 2: profesional opcional ("Sin preferencia" asigna el primero disponible); solo aparecen empleados con "Recibe reservas desde la web"
-- [ ] Paso 3: fecha y hora disponibles según horario del negocio, del empleado y duración del servicio
-- [ ] Paso 4: datos del cliente y consentimiento de datos; confirmación en pantalla
-- [ ] Protección anti-spam (CAPTCHA y límite de solicitudes)
+- [x] Página "Reserva tu cita" con la marca del salón
+- [x] Paso 1: servicio, filtrado por categoría
+- [x] Paso 2: profesional opcional ("Sin preferencia" asigna el primero disponible); solo aparecen empleados con "Recibe reservas desde la web"
+- [x] Paso 3: fecha y hora disponibles según horario del negocio, del empleado y duración del servicio
+- [x] Paso 4: datos del cliente y consentimiento de datos; confirmación en pantalla
+- [x] Protección anti-spam (CAPTCHA y límite de solicitudes)
 
 #### Clientes (Fase 1, salvo lo indicado)
 - [x] (sesión 10; "planes activos" se llena con Tratamientos) Lista de clientes con indicadores: total, activos, nuevos del mes, planes activos
