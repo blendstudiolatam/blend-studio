@@ -1,0 +1,91 @@
+{
+  "_nota": "Tarifario de prueba (gama media-alta, Ciudad de Panamá, 2026). Precios en USD (B/.). Basado en precios públicos de salones, barberías y spas en Panamá (Fresha, Booksy, sitios de spas). Ajustar antes de usar en producción.",
+  "categorias": [
+    { "nombre": "Barbería", "imagen": "barberia-corte", "descripcion": "Cortes masculinos, barba y afeitado clásico.", "profesionales": ["e03"],
+      "servicios": [
+        { "nombre": "Corte clásico caballero", "duracion": 30, "precio": 15 },
+        { "nombre": "Corte fade / degradado", "duracion": 40, "precio": 18 },
+        { "nombre": "Perfilado de barba", "duracion": 20, "precio": 10 },
+        { "nombre": "Afeitado clásico con navaja y toalla caliente", "duracion": 30, "precio": 15 },
+        { "nombre": "Corte y barba", "duracion": 60, "precio": 25, "descuento": 22 },
+        { "nombre": "Corte niño (hasta 12 años)", "duracion": 30, "precio": 12 }
+      ] },
+    { "nombre": "Cabello", "imagen": "coloracion", "descripcion": "Cortes, color, peinados y tratamientos capilares.", "profesionales": ["e04", "e05"],
+      "servicios": [
+        { "nombre": "Corte dama", "duracion": 45, "precio": 25 },
+        { "nombre": "Lavado y secado (brushing)", "duracion": 45, "precio": 20 },
+        { "nombre": "Peinado de evento / recogido", "duracion": 60, "precio": 45 },
+        { "nombre": "Tinte de raíz", "duracion": 90, "precio": 45 },
+        { "nombre": "Tinte completo", "duracion": 120, "precio": 65 },
+        { "nombre": "Mechas o balayage", "duracion": 180, "precio": 120, "descuento": 105 },
+        { "nombre": "Matizado / gloss", "duracion": 45, "precio": 30 },
+        { "nombre": "Keratina / alisado", "duracion": 150, "precio": 120 },
+        { "nombre": "Hidratación profunda", "duracion": 45, "precio": 30 },
+        { "nombre": "Tratamiento capilar anticaída (sesión)", "duracion": 60, "precio": 55 }
+      ] },
+    { "nombre": "Uñas", "imagen": "unas", "descripcion": "Acrílicas, gel, polygel y diseño.", "profesionales": ["e06"],
+      "servicios": [
+        { "nombre": "Uñas acrílicas (set completo)", "duracion": 90, "precio": 40 },
+        { "nombre": "Relleno de acrílico", "duracion": 60, "precio": 28 },
+        { "nombre": "Uñas en gel / polygel", "duracion": 90, "precio": 45 },
+        { "nombre": "Nail art (por uña)", "duracion": 10, "precio": 2 },
+        { "nombre": "Retiro de acrílico o gel", "duracion": 30, "precio": 10 }
+      ] },
+    { "nombre": "Manicure", "imagen": "unas", "descripcion": "Cuidado y esmaltado de manos.", "profesionales": ["e06"],
+      "servicios": [
+        { "nombre": "Manicure tradicional", "duracion": 40, "precio": 12 },
+        { "nombre": "Manicure semipermanente", "duracion": 50, "precio": 22 },
+        { "nombre": "Manicure spa", "duracion": 60, "precio": 25 }
+      ] },
+    { "nombre": "Pedicure", "imagen": "spa-lounge", "descripcion": "Cuidado y esmaltado de pies.", "profesionales": ["e06"],
+      "servicios": [
+        { "nombre": "Pedicure tradicional", "duracion": 50, "precio": 18 },
+        { "nombre": "Pedicure semipermanente", "duracion": 60, "precio": 28 },
+        { "nombre": "Pedicure spa", "duracion": 75, "precio": 35 }
+      ] },
+    { "nombre": "Pestañas y cejas", "imagen": "pestanas", "descripcion": "Extensiones, lifting, diseño y laminado.", "profesionales": ["e07"],
+      "servicios": [
+        { "nombre": "Extensiones pelo a pelo (clásicas)", "duracion": 120, "precio": 60 },
+        { "nombre": "Extensiones volumen ruso", "duracion": 150, "precio": 80 },
+        { "nombre": "Retoque de extensiones", "duracion": 60, "precio": 35 },
+        { "nombre": "Lifting de pestañas con tinte", "duracion": 60, "precio": 40 },
+        { "nombre": "Diseño de cejas", "duracion": 30, "precio": 15 },
+        { "nombre": "Laminado de cejas", "duracion": 45, "precio": 35 }
+      ] },
+    { "nombre": "Facial", "imagen": "facial", "descripcion": "Limpiezas y tratamientos de la piel del rostro.", "profesionales": ["e07"],
+      "servicios": [
+        { "nombre": "Limpieza facial profunda", "duracion": 60, "precio": 50 },
+        { "nombre": "Facial hidratante", "duracion": 60, "precio": 55 },
+        { "nombre": "Tratamiento facial para acné (sesión)", "duracion": 60, "precio": 45 },
+        { "nombre": "Despigmentación de manchas (sesión)", "duracion": 60, "precio": 60 },
+        { "nombre": "Peeling químico", "duracion": 45, "precio": 65 }
+      ] },
+    { "nombre": "Corporal", "imagen": "spa-masaje", "descripcion": "Tratamientos para el cuerpo.", "profesionales": ["e07"],
+      "servicios": [
+        { "nombre": "Exfoliación corporal", "duracion": 45, "precio": 45 },
+        { "nombre": "Envoltura corporal reductiva", "duracion": 60, "precio": 60 },
+        { "nombre": "Drenaje linfático", "duracion": 60, "precio": 60 }
+      ] },
+    { "nombre": "Depilación", "imagen": "cejas", "descripcion": "Depilación con cera.", "profesionales": ["e07", "e06"],
+      "servicios": [
+        { "nombre": "Cejas con cera", "duracion": 15, "precio": 8 },
+        { "nombre": "Bozo", "duracion": 10, "precio": 6 },
+        { "nombre": "Axilas", "duracion": 15, "precio": 12 },
+        { "nombre": "Media pierna", "duracion": 30, "precio": 20 },
+        { "nombre": "Pierna completa", "duracion": 45, "precio": 35 },
+        { "nombre": "Bikini", "duracion": 30, "precio": 25 }
+      ] },
+    { "nombre": "Spa", "imagen": "spa-masaje", "descripcion": "Masajes y rituales de relajación.", "profesionales": ["e07"],
+      "servicios": [
+        { "nombre": "Masaje relajante", "duracion": 60, "precio": 65 },
+        { "nombre": "Masaje con piedras calientes", "duracion": 75, "precio": 85, "descuento": 75 },
+        { "nombre": "Masaje descontracturante", "duracion": 60, "precio": 70 },
+        { "nombre": "Ritual spa (masaje + facial)", "duracion": 120, "precio": 130, "descuento": 115 }
+      ] },
+    { "nombre": "Maquillaje", "imagen": "maquillaje", "descripcion": "Maquillaje social y de novia.", "profesionales": ["e04", "e07"],
+      "servicios": [
+        { "nombre": "Maquillaje social", "duracion": 60, "precio": 45 },
+        { "nombre": "Maquillaje de novia (incluye prueba)", "duracion": 120, "precio": 150 }
+      ] }
+  ]
+}
