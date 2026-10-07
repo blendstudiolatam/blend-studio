@@ -50,6 +50,7 @@
 ## Convenciones de base de datos
 - Migraciones en `supabase/migrations/`; se aplican con `npm run db:push` (usa `SUPABASE_DB_URL` de `.env.local`).
 - Cada tabla nueva: `revoke all ... from anon, authenticated`, luego `grant` solo lo necesario (por columna si aplica), `enable row level security` y políticas usando las funciones de `privado` (`tiene_acceso`, `tiene_rol`, `es_admin`, `es_dueno`).
+- Permisos por módulo (sesión 4): en las políticas de tablas de negocio usar `privado.puede(sucursal_id, '<modulo>', escribir)`; ya aplica los límites fijos. En la app, `requireModulo(modulo, editar)` en cada página/acción. Roles: `admin`, `recepcion`, `estilista` (se muestra "Profesional"), `asistente`.
 - Tablas con citas, ventas o caja: trigger `privado.registrar_auditoria()`.
 - Toda tabla nueva con pruebas de permisos en `tests/rls/` (`npm run test:rls`). Las pruebas corren en transacciones que se deshacen.
 - El dueño (`perfiles.es_dueno`) es admin en todas las sucursales; solo se activa por SQL.

@@ -1,10 +1,11 @@
 import "server-only";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
+import type { ModuloApp, NivelPermiso, Permisos, Rol } from "./permisos";
 
-export type Rol = "admin" | "recepcion" | "estilista";
+export type { Rol } from "./permisos";
 
 export type SucursalConRol = { id: string; nombre: string; rol: Rol };
 
@@ -128,5 +129,27 @@ export const requirePanel = cache(async () => {
     (sucursales.length === 1 ? sucursales[0] : undefined);
   if (!actual) redirect("/seleccionar-sucursal");
 
-  return { ...cuenta, sucursales, sucursal: actual, rol: actual.rol };
+  const permisos = await getPermisos(actual.id);
+  return { ...cuenta, sucursales, sucursal: actual, rol: actual.rol, permisos };
 });
+
+/** Permisos efectivos del usuario en una sucursal, calculados por la base de datos. */
+const getPermisos = cache(async (sucursalId: string): Promise<Permisos> => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("mis_permisos", { p_sucursal: sucursalId });
+  if (error) throw new Error("No se pudieron cargar los permisos");
+  return Object.fromEntries(
+    (data ?? []).map((p: { modulo: ModuloApp; nivel: NivelPermiso }) => [p.modulo, p.nivel]),
+  ) as Permisos;
+});
+
+/**
+ * Exige poder ver (o editar) un módulo en la sucursal actual; si no, 404.
+ * Es una comprobación de comodidad: la base de datos vuelve a verificarlo con RLS.
+ */
+export async function requireModulo(modulo: ModuloApp, editar = false) {
+  const ctx = await requirePanel();
+  const nivel = ctx.permisos[modulo];
+  if (nivel === "ninguno" || (editar && nivel !== "total")) notFound();
+  return ctx;
+}

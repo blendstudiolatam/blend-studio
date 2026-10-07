@@ -65,6 +65,46 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"permisos_rol": {
+                  Row: {
+                    "modulo": Database["public"]['Enums']["modulo_app"],"nivel": Database["public"]['Enums']["nivel_permiso"],"rol": Database["public"]['Enums']["rol_usuario"],"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "modulo": Database["public"]['Enums']["modulo_app"],"nivel": Database["public"]['Enums']["nivel_permiso"],"rol": Database["public"]['Enums']["rol_usuario"],"updated_at"?: string
+                  }
+                  Update: {
+                    "modulo"?: Database["public"]['Enums']["modulo_app"],"nivel"?: Database["public"]['Enums']["nivel_permiso"],"rol"?: Database["public"]['Enums']["rol_usuario"],"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"permisos_usuario": {
+                  Row: {
+                    "created_at": string,"id": string,"modulo": Database["public"]['Enums']["modulo_app"],"nivel": Database["public"]['Enums']["nivel_permiso"],"sucursal_id": string,"updated_at": string,"usuario_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"id"?: string,"modulo": Database["public"]['Enums']["modulo_app"],"nivel": Database["public"]['Enums']["nivel_permiso"],"sucursal_id": string,"updated_at"?: string,"usuario_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: string,"modulo"?: Database["public"]['Enums']["modulo_app"],"nivel"?: Database["public"]['Enums']["nivel_permiso"],"sucursal_id"?: string,"updated_at"?: string,"usuario_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "permisos_usuario_sucursal_id_fkey"
+      columns: ["sucursal_id"]
+isOneToOne: false
+      referencedRelation: "sucursales"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "permisos_usuario_usuario_id_fkey"
+      columns: ["usuario_id"]
+isOneToOne: false
+      referencedRelation: "perfiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"sucursales": {
                   Row: {
                     "activa": boolean,"created_at": string,"direccion": string | null,"id": string,"nombre": string,"slug": string,"telefono": string | null,"updated_at": string,"zona_horaria": string
@@ -90,10 +130,15 @@ isOneToOne: false
                            },
 "login_registrar_intento":
 { Args: { "p_email_hash": string,"p_exito": boolean,"p_ip": string }; Returns: undefined
+                           },
+"mis_permisos":
+{ Args: { "p_sucursal": string }; Returns: {
+              "modulo": Database["public"]['Enums']["modulo_app"],"nivel": Database["public"]['Enums']["nivel_permiso"]
+            }[]
                            }
           }
           Enums: {
-            "rol_usuario": "admin"|"recepcion"|"estilista"
+            "modulo_app": "agenda"|"clientes"|"servicios"|"personal"|"productos"|"ventas"|"caja"|"finanzas"|"reportes"|"configuracion","nivel_permiso": "ninguno"|"lectura"|"total","rol_usuario": "admin"|"recepcion"|"estilista"|"asistente"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -209,7 +254,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "rol_usuario": ["admin", "recepcion", "estilista"]
+            "modulo_app": ["agenda", "clientes", "servicios", "personal", "productos", "ventas", "caja", "finanzas", "reportes", "configuracion"],"nivel_permiso": ["ninguno", "lectura", "total"],"rol_usuario": ["admin", "recepcion", "estilista", "asistente"]
           }
         }
 } as const

@@ -109,7 +109,7 @@ export async function darAcceso(
   db: Db,
   usuarioId: string,
   sucursalId: string,
-  rol: "admin" | "recepcion" | "estilista",
+  rol: "admin" | "recepcion" | "estilista" | "asistente",
 ): Promise<void> {
   await db.query(
     `insert into public.accesos (usuario_id, sucursal_id, rol) values ($1, $2, $3)`,

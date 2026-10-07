@@ -1,12 +1,7 @@
 import { BarraSuperior } from "@/components/panel/barra-superior";
 import { MenuLateral } from "@/components/panel/menu-lateral";
-import { requirePanel, type Rol } from "@/lib/auth/sesion";
-
-const etiquetas: Record<Rol, string> = {
-  admin: "Administración",
-  recepcion: "Recepción",
-  estilista: "Profesional",
-};
+import { ETIQUETA_ROL } from "@/lib/auth/permisos";
+import { requirePanel } from "@/lib/auth/sesion";
 
 export default async function PanelLayout({ children }: LayoutProps<"/panel">) {
   // Cada página del panel vuelve a llamar a requirePanel(): el layout solo pinta el marco.
@@ -15,8 +10,8 @@ export default async function PanelLayout({ children }: LayoutProps<"/panel">) {
   return (
     <div className="flex min-h-dvh flex-1 flex-col lg:pl-64">
       <MenuLateral
-        rol={ctx.rol}
-        etiquetaRol={ctx.esDueno ? "Propietario" : etiquetas[ctx.rol]}
+        permisos={ctx.permisos}
+        etiquetaRol={ctx.esDueno ? "Propietario" : ETIQUETA_ROL[ctx.rol]}
         sucursal={ctx.sucursal.nombre}
         variasSucursales={ctx.sucursales.length > 1}
       />

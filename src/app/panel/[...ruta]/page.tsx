@@ -1,18 +1,17 @@
 import { notFound } from "next/navigation";
 import { Encabezado } from "@/components/panel/encabezado";
-import { buscarRuta } from "@/components/panel/navegacion";
+import { buscarRuta, puedeVerModulo } from "@/components/panel/navegacion";
 import { requirePanel } from "@/lib/auth/sesion";
 
 /** Página provisional de los módulos que todavía no están construidos. */
 export default async function ModuloPendientePage({ params }: PageProps<"/panel/[...ruta]">) {
-  const { rol } = await requirePanel();
+  const { permisos } = await requirePanel();
   const { ruta } = await params;
   const { modulo, hijo } = buscarRuta(`/panel/${ruta.join("/")}`);
 
-  // Ruta inexistente o módulo que este rol no ve.
-  if (!modulo || !modulo.roles.includes(rol) || ruta.length > 2) notFound();
+  // Ruta inexistente o módulo sin permiso para este usuario.
+  if (!modulo || !puedeVerModulo(modulo, permisos) || ruta.length > 2) notFound();
   if (ruta.length === 2 && !hijo) notFound();
-  if (hijo?.roles && !hijo.roles.includes(rol)) notFound();
 
   const fase = hijo?.fase ?? modulo.fase;
 

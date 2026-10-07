@@ -13,11 +13,11 @@ import {
   Wallet,
   type LucideIcon,
 } from "lucide-react";
-import type { Rol } from "@/lib/auth/sesion";
+import type { ModuloApp, Permisos } from "@/lib/auth/permisos";
 
 /**
  * Menú del panel (anexo v2 de CLAUDE.md). Un solo lugar define nombres, rutas,
- * íconos, fase y qué roles ven cada módulo. La visibilidad es solo de interfaz:
+ * íconos, fase y qué permiso exige cada módulo. La visibilidad es solo de interfaz:
  * los permisos reales se verifican en el servidor y con RLS.
  */
 export type SubModulo = {
@@ -25,7 +25,6 @@ export type SubModulo = {
   slug: string;
   fase: 1 | 2 | 3;
   listo?: boolean;
-  roles?: Rol[];
 };
 
 export type Modulo = {
@@ -35,13 +34,10 @@ export type Modulo = {
   descripcion: string;
   fase: 1 | 2 | 3;
   listo?: boolean;
-  roles: Rol[];
+  /** Módulo de permisos que lo controla (null = siempre visible). */
+  permiso: ModuloApp | null;
   hijos?: SubModulo[];
 };
-
-const TODOS: Rol[] = ["admin", "recepcion", "estilista"];
-const GESTION: Rol[] = ["admin", "recepcion"];
-const ADMIN: Rol[] = ["admin"];
 
 export const MODULOS: Modulo[] = [
   {
@@ -51,7 +47,7 @@ export const MODULOS: Modulo[] = [
     descripcion: "Resumen del día",
     fase: 1,
     listo: true,
-    roles: TODOS,
+    permiso: null,
   },
   {
     nombre: "Agenda",
@@ -59,7 +55,7 @@ export const MODULOS: Modulo[] = [
     icono: CalendarDays,
     descripcion: "Citas por día, semana y mes",
     fase: 1,
-    roles: TODOS,
+    permiso: "agenda",
   },
   {
     nombre: "Clientes",
@@ -67,7 +63,7 @@ export const MODULOS: Modulo[] = [
     icono: Users,
     descripcion: "Fichas, tratamientos y fidelización",
     fase: 1,
-    roles: GESTION,
+    permiso: "clientes",
     hijos: [
       { nombre: "Lista de clientes", slug: "lista", fase: 1 },
       { nombre: "Planes de tratamiento", slug: "tratamientos", fase: 1 },
@@ -83,7 +79,7 @@ export const MODULOS: Modulo[] = [
     icono: Scissors,
     descripcion: "Categorías y catálogo de servicios",
     fase: 1,
-    roles: GESTION,
+    permiso: "servicios",
     hijos: [
       { nombre: "Categorías", slug: "categorias", fase: 1 },
       { nombre: "Catálogo", slug: "catalogo", fase: 1 },
@@ -95,7 +91,7 @@ export const MODULOS: Modulo[] = [
     icono: UserCog,
     descripcion: "Empleados, usuarios y permisos",
     fase: 1,
-    roles: ADMIN,
+    permiso: "personal",
     hijos: [
       { nombre: "Empleados", slug: "empleados", fase: 1 },
       { nombre: "Usuarios", slug: "usuarios", fase: 1 },
@@ -108,7 +104,7 @@ export const MODULOS: Modulo[] = [
     icono: Wallet,
     descripcion: "Apertura, caja activa y movimientos",
     fase: 2,
-    roles: GESTION,
+    permiso: "caja",
     hijos: [
       { nombre: "Apertura de caja", slug: "apertura", fase: 2 },
       { nombre: "Caja activa", slug: "activa", fase: 2 },
@@ -121,7 +117,7 @@ export const MODULOS: Modulo[] = [
     icono: ShoppingCart,
     descripcion: "Punto de venta, cotizaciones y devoluciones",
     fase: 2,
-    roles: GESTION,
+    permiso: "ventas",
     hijos: [
       { nombre: "Punto de venta", slug: "pos", fase: 2 },
       { nombre: "Lista de ventas", slug: "lista", fase: 2 },
@@ -135,7 +131,7 @@ export const MODULOS: Modulo[] = [
     icono: Landmark,
     descripcion: "Flujo de efectivo, gastos y cuentas",
     fase: 2,
-    roles: ADMIN,
+    permiso: "finanzas",
     hijos: [
       { nombre: "Flujo de efectivo", slug: "flujo", fase: 2 },
       { nombre: "Gastos", slug: "gastos", fase: 2 },
@@ -149,7 +145,7 @@ export const MODULOS: Modulo[] = [
     icono: Package,
     descripcion: "Productos, stock y categorías",
     fase: 2,
-    roles: GESTION,
+    permiso: "productos",
     hijos: [
       { nombre: "Productos", slug: "productos", fase: 2 },
       { nombre: "Categorías", slug: "categorias", fase: 2 },
@@ -161,7 +157,7 @@ export const MODULOS: Modulo[] = [
     icono: ChartColumn,
     descripcion: "Ventas, clientes, empleados y finanzas",
     fase: 3,
-    roles: ADMIN,
+    permiso: "reportes",
   },
   {
     nombre: "Recordatorios",
@@ -169,7 +165,7 @@ export const MODULOS: Modulo[] = [
     icono: BellRing,
     descripcion: "Avisos de citas por WhatsApp y correo",
     fase: 3,
-    roles: GESTION,
+    permiso: "agenda",
   },
   {
     nombre: "Configuración",
@@ -177,7 +173,7 @@ export const MODULOS: Modulo[] = [
     icono: Settings,
     descripcion: "Datos del negocio y preferencias",
     fase: 1,
-    roles: ADMIN,
+    permiso: "configuracion",
     hijos: [
       { nombre: "Datos del negocio", slug: "negocio", fase: 1 },
       { nombre: "Preferencias", slug: "preferencias", fase: 1 },
@@ -188,11 +184,11 @@ export const MODULOS: Modulo[] = [
 export const rutaDe = (modulo: Modulo, hijo?: SubModulo) =>
   ["/panel", modulo.slug, hijo?.slug].filter(Boolean).join("/");
 
-export function modulosParaRol(rol: Rol): Modulo[] {
-  return MODULOS.filter((m) => m.roles.includes(rol)).map((m) => ({
-    ...m,
-    hijos: m.hijos?.filter((h) => !h.roles || h.roles.includes(rol)),
-  }));
+export const puedeVerModulo = (m: Modulo, permisos: Permisos) =>
+  m.permiso === null || permisos[m.permiso] !== "ninguno";
+
+export function modulosVisibles(permisos: Permisos): Modulo[] {
+  return MODULOS.filter((m) => puedeVerModulo(m, permisos));
 }
 
 /** Encuentra el módulo (y submódulo) que corresponde a una ruta del panel. */

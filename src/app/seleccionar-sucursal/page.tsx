@@ -2,15 +2,10 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PantallaAcceso } from "@/components/auth/pantalla-acceso";
 import { elegirSucursal } from "@/app/entrar/actions";
-import { getSucursales, type Rol } from "@/lib/auth/sesion";
+import { ETIQUETA_ROL as nombreRol } from "@/lib/auth/permisos";
+import { getSucursales } from "@/lib/auth/sesion";
 
 export const metadata: Metadata = { title: "Elegir sucursal" };
-
-const nombreRol: Record<Rol, string> = {
-  admin: "Administración",
-  recepcion: "Recepción",
-  estilista: "Estilista",
-};
 
 export default async function SeleccionarSucursalPage() {
   const sucursales = await getSucursales();
