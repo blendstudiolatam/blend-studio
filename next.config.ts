@@ -35,8 +35,8 @@ const nextConfig: NextConfig = {
       : [],
   },
   experimental: {
-    // Para subir el logo (hasta ~3 MB antes de comprimirlo).
-    serverActions: { bodySizeLimit: "4mb" },
+    // Logo y fotos (hasta ~3 MB) y documentos de clientes (hasta 8 MB).
+    serverActions: { bodySizeLimit: "9mb" },
   },
   async headers() {
     return [

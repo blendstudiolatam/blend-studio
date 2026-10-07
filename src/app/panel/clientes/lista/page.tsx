@@ -81,7 +81,6 @@ export default async function ListaClientesPage({ searchParams }: PageProps<"/pa
       indicadores={{ total: total.count ?? 0, activos: activos.count ?? 0, nuevos: nuevos.count ?? 0 }}
       filtro={{ texto, estado, pagina, porPagina: POR_PAGINA, encontrados: count ?? 0 }}
       editable={ctx.permisos.clientes === "total"}
-      puedeEliminar={ctx.rol === "admin"}
     />
   );
 }

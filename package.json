@@ -10,6 +10,7 @@
     "db:push": "node --env-file-if-exists=.env.local scripts/db-push.mjs",
     "db:types": "node --env-file-if-exists=.env.local scripts/db-types.mjs",
     "seed:clientes": "node --env-file-if-exists=.env.local scripts/seed-demo-clientes.mjs",
+    "seed:salud": "node --env-file-if-exists=.env.local scripts/seed-demo-salud.mjs",
     "seed:empleados": "node --env-file-if-exists=.env.local scripts/seed-demo-empleados.mjs",
     "seed:servicios": "node --env-file-if-exists=.env.local scripts/seed-demo-servicios.mjs",
     "seed:usuarios": "node --env-file-if-exists=.env.local scripts/seed-demo-usuarios.mjs",

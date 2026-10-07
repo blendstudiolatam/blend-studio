@@ -58,6 +58,7 @@
 - Marca: `negocio` (una fila) + `public.marca_publica()` para datos públicos; `getMarca()` aplica colores y tipografías como variables CSS en `<html>`. Logo en Storage `marca` (público, solo admins escriben; el servidor lo convierte a WebP). Horario por día en `horarios_sucursal`.
 - Empleados (sesión 9): `empleados` (usuario_id opcional, solo lo enlaza el servidor), `horarios_empleado`, `bloqueos_empleado`, `empleado_servicios` (comisión por servicio opcional). Fotos en Storage `equipo` (público). Datos de prueba: `npm run seed:empleados`.
 - Clientes (sesión 10): `clientes` es global (sin `sucursal_id`); RLS con `privado.puede_alguna('clientes', escribir)`; borrar solo admin. Código visible C-0001 (`codigo`), búsqueda con `busqueda`/`telefono_digitos` (columnas generadas). Fotos en Storage `clientes` (PRIVADO, enlaces firmados de 1 hora). Importar/exportar Excel/CSV con `exceljs` (`src/lib/excel.server.ts`; el CSV exportado se protege contra fórmulas). Datos de prueba: `npm run seed:clientes`.
+- Salud del cliente (sesiones 11-12): `historial_medico`, `medicamentos_cliente`, `documentos_cliente` SIN acceso directo (política using false); todo por funciones `public.ver_historial_medico`, `guardar_historial_medico`, `documentos_de_cliente`, `registrar_documento`, `abrir_documento`, `eliminar_documento`, que verifican `privado.puede_ver_salud`/`puede_editar_salud` y escriben en `consultas_salud` (lo ve solo admin). Sin consentimiento no se guardan datos (check en la tabla). Archivos en Storage `documentos` (privado, sin políticas): solo el servidor sube y firma enlaces de 5 minutos tras la autorización. **Pendiente en Agenda:** agregar a `privado.puede_ver_salud` al profesional con cita con el cliente. Datos de prueba: `npm run seed:salud`.
 - Tablas con citas, ventas o caja: trigger `privado.registrar_auditoria()`.
 - Toda tabla nueva con pruebas de permisos en `tests/rls/` (`npm run test:rls`). Las pruebas corren en transacciones que se deshacen.
 - El dueño (`perfiles.es_dueno`) es admin en todas las sucursales; solo se activa por SQL.
@@ -148,11 +149,11 @@ Marca cada punto cuando esté terminado y probado.
 - [x] Buscador por nombre, ID o teléfono; pestañas Todos, Activo, Nuevo, Inactivo; vista tabla o tarjetas
 - [x] (última visita, planes, sesiones y total gastado se llenan con Agenda, Tratamientos y Ventas) Columnas: cliente (foto, ID, edad, género), contacto, última visita, planes, sesiones, total gastado, estado, acciones
 - [x] Botones Importar (Excel/CSV), Exportar y Nuevo cliente
-- [ ] Ficha del cliente con pestañas:
-  - [ ] Datos personales: foto, nombre, apellidos, fecha de nacimiento, edad, género, documento de identidad, contacto; preferencias "Recordatorios por WhatsApp" y "Permitir uso de fotos"
-  - [ ] Historial médico: alergias, condiciones médicas, medicación actual (medicamento, dosis, desde), signos vitales (tipo de sangre, peso, altura, presión) y última actualización con quién la hizo
+- [x] (sesiones 11-12) Ficha del cliente con pestañas:
+  - [x] Datos personales: foto, nombre, apellidos, fecha de nacimiento, edad, género, documento de identidad, contacto; preferencias "Recordatorios por WhatsApp" y "Permitir uso de fotos"
+  - [x] (con consentimiento y registro de consultas) Historial médico: alergias, condiciones médicas, medicación actual (medicamento, dosis, desde), signos vitales (tipo de sangre, peso, altura, presión) y última actualización con quién la hizo
   - [ ] Planes de tratamiento (ver módulo Tratamientos)
-  - [ ] Documentos: subir archivos por categoría (consentimientos, estudios, fotografías antes/después, recetas, identificación)
+  - [x] Documentos: subir archivos por categoría (consentimientos, estudios, fotografías antes/después, recetas, identificación)
   - [ ] Facturas y recibos (Fase 2)
   - [ ] Lista de ventas del cliente: registros, total en servicios, total en productos, neto; cada venta con servicios, productos, profesional, cajero, forma de pago, estado y total (Fase 2)
 

@@ -23,7 +23,8 @@ export function FormularioCliente({
   cliente: FilaCliente | null;
   editable: boolean;
   puedeEliminar: boolean;
-  onListo: () => void;
+  /** En un diálogo: se llama al terminar. En la ficha no se pasa. */
+  onListo?: () => void;
 }) {
   const router = useRouter();
   const [error, setError] = useState<string>();
@@ -53,8 +54,11 @@ export function FormularioCliente({
       };
       const r = cliente ? await guardarCliente(cliente.id, datos) : await crearCliente(datos);
       if (r?.error) return setError(r.error);
+      setError(undefined);
+      if (!cliente && r?.id) return router.push(`/panel/clientes/lista/${r.id}`);
       router.refresh();
-      onListo();
+      if (onListo) onListo();
+      else setAviso("Cambios guardados.");
     });
 
   return (
@@ -207,8 +211,7 @@ export function FormularioCliente({
                       iniciar(async () => {
                         const r = await eliminarCliente(cliente.id);
                         if (r?.error) return setError(r.error);
-                        router.refresh();
-                        onListo();
+                        router.push("/panel/clientes/lista");
                       })
                     }
                     className="rounded-lg bg-red-700 px-3 py-1.5 text-xs text-white hover:bg-red-800"

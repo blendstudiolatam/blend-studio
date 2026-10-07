@@ -68,20 +68,18 @@ export function ListaClientes({
   indicadores,
   filtro,
   editable,
-  puedeEliminar,
 }: {
   clientes: FilaCliente[];
   indicadores: { total: number; activos: number; nuevos: number };
   filtro: Filtro;
   editable: boolean;
-  puedeEliminar: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const [cargando, iniciar] = useTransition();
   const [busqueda, setBusqueda] = useState(filtro.texto);
   const [vista, setVista] = useState<"tabla" | "tarjetas">("tabla");
-  const [editando, setEditando] = useState<FilaCliente | "nuevo" | null>(null);
+  const [nuevo, setNuevo] = useState(false);
   const [importando, setImportando] = useState(false);
   const [exportar, setExportar] = useState(false);
   const ultimaBusqueda = useRef(filtro.texto);
@@ -107,7 +105,7 @@ export function ListaClientes({
   }, [busqueda]);
 
   const paginas = Math.max(1, Math.ceil(filtro.encontrados / filtro.porPagina));
-  const abrir = (c: FilaCliente) => setEditando(c);
+  const abrir = (c: FilaCliente) => router.push(`/panel/clientes/lista/${c.id}`);
 
   return (
     <div className="space-y-8">
@@ -138,7 +136,7 @@ export function ListaClientes({
               </div>
               <button
                 type="button"
-                onClick={() => setEditando("nuevo")}
+                onClick={() => setNuevo(true)}
                 className="inline-flex items-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-xs uppercase tracking-[0.16em] text-ivory hover:bg-ink/85"
               >
                 <Plus className="h-4 w-4" /> Nuevo cliente
@@ -247,21 +245,13 @@ export function ListaClientes({
       )}
 
       <Dialogo
-        abierto={editando !== null}
-        onCerrar={() => setEditando(null)}
-        titulo={editando === "nuevo" ? "Nuevo cliente" : editando ? `${editando.nombre} ${editando.apellido}`.trim() : ""}
-        subtitulo={editando && editando !== "nuevo" ? codigoCliente(editando.codigo) : "Solo el nombre es obligatorio."}
+        abierto={nuevo}
+        onCerrar={() => setNuevo(false)}
+        titulo="Nuevo cliente"
+        subtitulo="Solo el nombre es obligatorio. Luego sigues en su ficha."
         ancho="max-w-2xl"
       >
-        {editando && (
-          <FormularioCliente
-            key={editando === "nuevo" ? "nuevo" : editando.id}
-            cliente={editando === "nuevo" ? null : editando}
-            editable={editable}
-            puedeEliminar={puedeEliminar}
-            onListo={() => setEditando(null)}
-          />
-        )}
+        {nuevo && <FormularioCliente cliente={null} editable={editable} puedeEliminar={false} />}
       </Dialogo>
 
       <Dialogo

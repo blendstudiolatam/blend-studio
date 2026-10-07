@@ -9,6 +9,8 @@ import type { Database } from "./database.types";
  * - Solo se usa en el servidor.
  * - Solo para tareas que no pertenecen a un usuario concreto (p. ej. límite de intentos).
  * - Nunca para leer o escribir datos de negocio en nombre de un usuario.
+ *   Única excepción: archivos del almacenamiento privado "documentos", y solo después
+ *   de que una función de la base de datos autorizó y registró la acción.
  */
 export function createAdminClient() {
   const { NEXT_PUBLIC_SUPABASE_URL } = requirePublicEnv();

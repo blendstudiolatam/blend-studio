@@ -123,6 +123,58 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"consultas_salud": {
+                  Row: {
+                    "accion": string,"cliente_id": string,"created_at": string,"detalle": string | null,"documento_id": string | null,"id": string,"usuario_id": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "accion": string,"cliente_id": string,"created_at"?: string,"detalle"?: string | null,"documento_id"?: string | null,"id"?: string,"usuario_id"?: string | null
+                  }
+                  Update: {
+                    "accion"?: string,"cliente_id"?: string,"created_at"?: string,"detalle"?: string | null,"documento_id"?: string | null,"id"?: string,"usuario_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "consultas_salud_cliente_id_fkey"
+      columns: ["cliente_id"]
+isOneToOne: false
+      referencedRelation: "clientes"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "consultas_salud_usuario_id_fkey"
+      columns: ["usuario_id"]
+isOneToOne: false
+      referencedRelation: "perfiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"documentos_cliente": {
+                  Row: {
+                    "categoria": Database["public"]['Enums']["categoria_documento"],"cliente_id": string,"created_at": string,"id": string,"nombre": string,"path": string,"subido_por": string | null,"tamano": number,"tipo": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "categoria": Database["public"]['Enums']["categoria_documento"],"cliente_id": string,"created_at"?: string,"id"?: string,"nombre": string,"path": string,"subido_por"?: string | null,"tamano": number,"tipo": string
+                  }
+                  Update: {
+                    "categoria"?: Database["public"]['Enums']["categoria_documento"],"cliente_id"?: string,"created_at"?: string,"id"?: string,"nombre"?: string,"path"?: string,"subido_por"?: string | null,"tamano"?: number,"tipo"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "documentos_cliente_cliente_id_fkey"
+      columns: ["cliente_id"]
+isOneToOne: false
+      referencedRelation: "clientes"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "documentos_cliente_subido_por_fkey"
+      columns: ["subido_por"]
+isOneToOne: false
+      referencedRelation: "perfiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"empleado_servicios": {
                   Row: {
                     "comision_pct": number | null,"empleado_id": string,"servicio_id": string,"sucursal_id": string
@@ -181,6 +233,38 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"historial_medico": {
+                  Row: {
+                    "actualizado_por": string | null,"alergias": string | null,"altura_cm": number | null,"cliente_id": string,"condiciones": string | null,"consentimiento": boolean,"consentimiento_at": string | null,"consentimiento_por": string | null,"observaciones": string | null,"peso_kg": number | null,"presion": string | null,"tipo_sangre": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "actualizado_por"?: string | null,"alergias"?: string | null,"altura_cm"?: number | null,"cliente_id": string,"condiciones"?: string | null,"consentimiento"?: boolean,"consentimiento_at"?: string | null,"consentimiento_por"?: string | null,"observaciones"?: string | null,"peso_kg"?: number | null,"presion"?: string | null,"tipo_sangre"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "actualizado_por"?: string | null,"alergias"?: string | null,"altura_cm"?: number | null,"cliente_id"?: string,"condiciones"?: string | null,"consentimiento"?: boolean,"consentimiento_at"?: string | null,"consentimiento_por"?: string | null,"observaciones"?: string | null,"peso_kg"?: number | null,"presion"?: string | null,"tipo_sangre"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "historial_medico_actualizado_por_fkey"
+      columns: ["actualizado_por"]
+isOneToOne: false
+      referencedRelation: "perfiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "historial_medico_cliente_id_fkey"
+      columns: ["cliente_id"]
+isOneToOne: true
+      referencedRelation: "clientes"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "historial_medico_consentimiento_por_fkey"
+      columns: ["consentimiento_por"]
+isOneToOne: false
+      referencedRelation: "perfiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"horarios_empleado": {
                   Row: {
                     "dia_semana": number,"empleado_id": string,"entrada": string,"id": string,"salida": string,"sucursal_id": string,"trabaja": boolean
@@ -225,6 +309,26 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "sucursales"
       referencedColumns: ["id"]
+    }
+                  ]
+                },"medicamentos_cliente": {
+                  Row: {
+                    "cliente_id": string,"desde": string | null,"dosis": string | null,"id": string,"medicamento": string,"orden": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cliente_id": string,"desde"?: string | null,"dosis"?: string | null,"id"?: string,"medicamento": string,"orden"?: number
+                  }
+                  Update: {
+                    "cliente_id"?: string,"desde"?: string | null,"dosis"?: string | null,"id"?: string,"medicamento"?: string,"orden"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "medicamentos_cliente_cliente_id_fkey"
+      columns: ["cliente_id"]
+isOneToOne: false
+      referencedRelation: "historial_medico"
+      referencedColumns: ["cliente_id"]
     }
                   ]
                 },"negocio": {
@@ -341,7 +445,23 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "login_espera_segundos":
+            "abrir_documento":
+{ Args: { "p_documento": string }; Returns: {
+              "nombre": string,"path": string,"tipo": string
+            }[]
+                           },
+"documentos_de_cliente":
+{ Args: { "p_cliente": string }; Returns: {
+              "categoria": Database["public"]['Enums']["categoria_documento"],"created_at": string,"id": string,"nombre": string,"subido_por_nombre": string,"tamano": number,"tipo": string
+            }[]
+                           },
+"eliminar_documento":
+{ Args: { "p_documento": string }; Returns: string
+                           },
+"guardar_historial_medico":
+{ Args: { "p_cliente": string,"p_datos": Json,"p_medicamentos": Json }; Returns: undefined
+                           },
+"login_espera_segundos":
 { Args: { "p_email_hash": string,"p_ip": string }; Returns: number
                            },
 "login_registrar_intento":
@@ -356,10 +476,23 @@ isOneToOne: false
 { Args: { "p_sucursal": string }; Returns: {
               "modulo": Database["public"]['Enums']["modulo_app"],"nivel": Database["public"]['Enums']["nivel_permiso"]
             }[]
+                           },
+"permisos_salud":
+{ Args: { "p_cliente": string }; Returns: {
+              "editar": boolean,"ver": boolean
+            }[]
+                           },
+"registrar_documento":
+{ Args: { "p_categoria": Database["public"]['Enums']["categoria_documento"],"p_cliente": string,"p_nombre": string,"p_tamano": number,"p_tipo": string }; Returns: {
+              "id": string,"path": string
+            }[]
+                           },
+"ver_historial_medico":
+{ Args: { "p_cliente": string }; Returns: Json
                            }
           }
           Enums: {
-            "estado_empleado": "activo"|"vacaciones"|"inactivo","modulo_app": "agenda"|"clientes"|"servicios"|"personal"|"productos"|"ventas"|"caja"|"finanzas"|"reportes"|"configuracion","nivel_permiso": "ninguno"|"lectura"|"total","rol_usuario": "admin"|"recepcion"|"estilista"|"asistente"
+            "categoria_documento": "consentimiento"|"estudio"|"antes_despues"|"receta"|"identificacion"|"otro","estado_empleado": "activo"|"vacaciones"|"inactivo","modulo_app": "agenda"|"clientes"|"servicios"|"personal"|"productos"|"ventas"|"caja"|"finanzas"|"reportes"|"configuracion","nivel_permiso": "ninguno"|"lectura"|"total","rol_usuario": "admin"|"recepcion"|"estilista"|"asistente"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -475,7 +608,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "estado_empleado": ["activo", "vacaciones", "inactivo"],"modulo_app": ["agenda", "clientes", "servicios", "personal", "productos", "ventas", "caja", "finanzas", "reportes", "configuracion"],"nivel_permiso": ["ninguno", "lectura", "total"],"rol_usuario": ["admin", "recepcion", "estilista", "asistente"]
+            "categoria_documento": ["consentimiento", "estudio", "antes_despues", "receta", "identificacion", "otro"],"estado_empleado": ["activo", "vacaciones", "inactivo"],"modulo_app": ["agenda", "clientes", "servicios", "personal", "productos", "ventas", "caja", "finanzas", "reportes", "configuracion"],"nivel_permiso": ["ninguno", "lectura", "total"],"rol_usuario": ["admin", "recepcion", "estilista", "asistente"]
           }
         }
 } as const
