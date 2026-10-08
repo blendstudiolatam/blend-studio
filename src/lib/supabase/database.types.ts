@@ -99,14 +99,14 @@ isOneToOne: false
                   ]
                 },"citas": {
                   Row: {
-                    "cliente_id": string,"creado_por": string | null,"created_at": string,"empleado_id": string,"estado": Database["public"]['Enums']["estado_cita"],"fin": string,"id": string,"inicio": string,"motivo_cancelacion": string | null,"notas": string | null,"origen": string,"precio": number | null,"servicio_id": string | null,"sesion_id": string | null,"sucursal_id": string,"updated_at": string
+                    "cliente_id": string,"comision_pct": number | null,"creado_por": string | null,"created_at": string,"empleado_id": string,"estado": Database["public"]['Enums']["estado_cita"],"fin": string,"id": string,"inicio": string,"motivo_cancelacion": string | null,"notas": string | null,"origen": string,"precio": number | null,"servicio_id": string | null,"sesion_id": string | null,"sucursal_id": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "cliente_id": string,"creado_por"?: string | null,"created_at"?: string,"empleado_id": string,"estado"?: Database["public"]['Enums']["estado_cita"],"fin": string,"id"?: string,"inicio": string,"motivo_cancelacion"?: string | null,"notas"?: string | null,"origen"?: string,"precio"?: number | null,"servicio_id"?: string | null,"sesion_id"?: string | null,"sucursal_id": string,"updated_at"?: string
+                    "cliente_id": string,"comision_pct"?: number | null,"creado_por"?: string | null,"created_at"?: string,"empleado_id": string,"estado"?: Database["public"]['Enums']["estado_cita"],"fin": string,"id"?: string,"inicio": string,"motivo_cancelacion"?: string | null,"notas"?: string | null,"origen"?: string,"precio"?: number | null,"servicio_id"?: string | null,"sesion_id"?: string | null,"sucursal_id": string,"updated_at"?: string
                   }
                   Update: {
-                    "cliente_id"?: string,"creado_por"?: string | null,"created_at"?: string,"empleado_id"?: string,"estado"?: Database["public"]['Enums']["estado_cita"],"fin"?: string,"id"?: string,"inicio"?: string,"motivo_cancelacion"?: string | null,"notas"?: string | null,"origen"?: string,"precio"?: number | null,"servicio_id"?: string | null,"sesion_id"?: string | null,"sucursal_id"?: string,"updated_at"?: string
+                    "cliente_id"?: string,"comision_pct"?: number | null,"creado_por"?: string | null,"created_at"?: string,"empleado_id"?: string,"estado"?: Database["public"]['Enums']["estado_cita"],"fin"?: string,"id"?: string,"inicio"?: string,"motivo_cancelacion"?: string | null,"notas"?: string | null,"origen"?: string,"precio"?: number | null,"servicio_id"?: string | null,"sesion_id"?: string | null,"sucursal_id"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -628,8 +628,18 @@ isOneToOne: false
               "nombre": string,"path": string,"tipo": string
             }[]
                            },
+"comisiones":
+{ Args: { "p_desde": string,"p_empleado"?: string,"p_hasta": string,"p_sucursal": string }; Returns: {
+              "cita_id": string,"cliente": string,"comision": number,"comision_pct": number,"empleado_id": string,"inicio": string,"precio": number,"servicio": string
+            }[]
+                           },
 "crear_reserva_web":
 { Args: { "p_apellido": string,"p_email": string,"p_empleado": string,"p_fecha": string,"p_hora": string,"p_nombre": string,"p_notas": string,"p_servicio": string,"p_slug": string,"p_telefono": string }; Returns: Json
+                           },
+"cumpleanos":
+{ Args: { "p_desde": string,"p_hasta": string }; Returns: {
+              "apellido": string,"codigo": number,"cumple": string,"edad": number,"email": string,"fecha_nacimiento": string,"foto_path": string,"id": string,"nombre": string,"recordatorios_whatsapp": boolean,"telefono": string
+            }[]
                            },
 "datos_privacidad":
 { Args: Record<PropertyKey, never>; Returns: {

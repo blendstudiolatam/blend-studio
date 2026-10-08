@@ -62,6 +62,7 @@
 - Tratamientos (sesión 13): `paquetes` (catálogo por sucursal; precios los gestiona Servicios total), `planes_tratamiento` y `sesiones_tratamiento` (por sucursal; Clientes). Las sesiones las crea el trigger `privado.sincronizar_sesiones` según la frecuencia; el plan pasa solo a completado al terminar. Fotos de avance = `documentos_cliente.plan_id`. Recordatorio manual por enlace de WhatsApp con el mensaje listo. **Pendiente en Fase 2:** marcar "pagada" desde el POS. Datos de prueba: `npm run seed:tratamientos`.
 - Agenda (sesiones 14-16): `citas` (por sucursal; no se borran, se cancelan). Reglas en el trigger `privado.validar_cita` (horario del salón, del profesional, días libres; mensajes en español con errcode P0001) y la restricción `citas_sin_cruce` (btree_gist; 23P01). Hora de Panamá fija UTC-5 (`src/lib/agenda.ts`). El profesional ve y edita solo su agenda (`privado.ve_agenda_de` / `edita_agenda_de`) y ve el historial médico de sus clientes con cita. Una cita con `sesion_id` actualiza su sesión de tratamiento. `config_recordatorios` por sucursal (solo admin; el envío llega en Fase 3). Las reservas web entrarán con `origen = web` por una función del servidor (sesiones 17-18). Datos de prueba: `npm run seed:citas`.
 - Reservas web (sesiones 17-18): páginas públicas `/reservar`, `/reservar/[slug]` y `/privacidad`. El público no toca tablas: el servidor llama con la clave secreta a `reserva_catalogo`, `reserva_horarios` (usa `privado.horarios_libres`: 15 min, mínimo 2 h de anticipación, máximo 60 días) y `crear_reserva_web` (cita pendiente, origen web; reconoce al cliente por los últimos 8 dígitos del teléfono sin cambiar sus datos; guarda `clientes.consentimiento_datos_at`). Antes: Cloudflare Turnstile (`src/lib/turnstile.server.ts`; claves de prueba en desarrollo, obligatorias en producción: `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`) y `reserva_permitida` (120 consultas/h por IP; 5 reservas/h por IP; 3/día por teléfono). La política de privacidad es un texto base: que la revise un abogado antes de producción.
+- Comisiones (sesión 19): `citas.comision_pct` se congela al completar la cita (trigger `privado.comision_cita`: comisión del servicio o la general). Esa columna no se lee directo: `public.comisiones(sucursal, desde, hasta, empleado)` solo para admin de la sucursal o el propio profesional. Cumpleaños: `public.cumpleanos(desde, hasta)` (cruza fin de año, respeta RLS). Buscador global: `src/app/panel/busqueda-actions.ts`.
 - Tablas con citas, ventas o caja: trigger `privado.registrar_auditoria()`.
 - Toda tabla nueva con pruebas de permisos en `tests/rls/` (`npm run test:rls`). Las pruebas corren en transacciones que se deshacen.
 - El dueño (`perfiles.es_dueno`) es admin en todas las sucursales; solo se activa por SQL.
@@ -116,7 +117,7 @@ Se replica la estructura y las funciones, no la apariencia: colores, fotos, ilus
 
 #### Pantallas de acceso
 - [x] Inicio de sesión con logo del salón, correo y contraseña (más verificación en dos pasos para admin) — sesión 3
-- [ ] Inicio (dashboard): saludo personalizado ("¡Buen día, [nombre]!"), botones Abrir agenda y Ver reportes, total de clientes, clientes nuevos del mes y vista rápida de las reservas del día
+- [x] (sesión 19) Inicio (dashboard): saludo personalizado ("¡Buen día, [nombre]!"), botones Abrir agenda y Ver reportes, total de clientes, clientes nuevos del mes y vista rápida de las reservas del día
 
 ### 2. Funciones por módulo y fase
 Marca cada punto cuando esté terminado y probado.
@@ -178,7 +179,7 @@ Marca cada punto cuando esté terminado y probado.
 - [x] (sesión 9) Empleados en tarjetas: foto, nombre, especialidad, rol, estado, contacto, horario y porcentaje de comisión
 - [x] Indicadores: total, activos, profesionales, en vacaciones; filtros Profesional, Recepción, Asistente
 - [x] (más horario semanal, vacaciones/días libres y servicios que realiza con comisión por servicio) Formulario de empleado: foto, nombre, correo, teléfono, rol (Administrador, Profesional, Recepción, Asistente), especialidad, horario, comisión %, estado (Activo, Vacaciones, Inactivo), "Recibe reservas desde la web", color de etiqueta en la agenda, acceso al sistema sí/no
-- [ ] (pestaña creada; se llena con Agenda/Ventas) Botón Rendimiento por empleado
+- [x] (servicios, ingresos y comisiones por periodo; ventas de productos en Fase 2) Botón Rendimiento por empleado
 - [x] (sesiones 4 y 5) Usuarios: lista con rol y usuario; permisos por módulo (Agenda, Personal, Clientes, Servicios, Productos, Reportes, Configuración, Caja, Ventas, Finanzas) con niveles Acceso total, Solo lectura y Sin acceso; matriz global de permisos por rol
 - [ ] Servicios del personal (Fase 2): registros enviados por los empleados desde su app; estados Pendiente, Validado, Rechazado; filtros Hoy, Semana, Quincena, Mes y Personalizado; columnas fecha, profesional, cliente, servicios, productos, pago, total, comisión, ajuste (+), descuento (−) y validar; al validar se actualizan inventario, caja y comisiones; resumen por profesional con comisión liquidada
 - [ ] App del trabajador (Fase 2, vista móvil instalable): resumen del día (ventas, citas, pendientes, comisión) y asistente "Registrar nueva venta" paso a paso: cliente, servicios, productos, pago, resumen con su comisión; queda pendiente de validación
@@ -224,7 +225,7 @@ Marca cada punto cuando esté terminado y probado.
 - [ ] Tarjeta por cliente: sellos visuales, nivel (Bronce, Plata, Oro), servicios, facturado, canjes, último servicio; botones +/− sello, Enviar premio y Promocionar; filtros y orden por progreso
 - [ ] Tarjetas de regalo: estado del portafolio (emitidas, activas, parcialmente usadas, reservadas, vencidas, saldo disponible); vender con plantilla personalizable (Minimalista, Premium, Spa, Barbería, Salón, Navidad, San Valentín, Día de la Madre, Cumpleaños), color y mensaje; enviar por WhatsApp o correo; canjear por código o escaneo; tabla con código, cliente, valor inicial, saldo, estado, emisión, vencimiento y empleado
 - [ ] Cupones: código, descripción, tipo (porcentaje o monto fijo), valor, audiencia, máximo de usos, color de etiqueta
-- [ ] Alerta de cumpleaños: cumpleaños próximos (Hoy, Esta semana, Este mes, Personalizado), exportar, mensaje sugerido editable con cupón, envío por WhatsApp con un clic, configuración de canales (la lista se hace en Fase 1; el envío en Fase 3)
+- [x] (lista, filtros, exportar, mensaje editable y botón de WhatsApp manual; envío automático en Fase 3) Alerta de cumpleaños: cumpleaños próximos (Hoy, Esta semana, Este mes, Personalizado), exportar, mensaje sugerido editable con cupón, envío por WhatsApp con un clic, configuración de canales (la lista se hace en Fase 1; el envío en Fase 3)
 - [ ] Clientes más frecuentes
 
 #### Recordatorios y WhatsApp (Fase 3)

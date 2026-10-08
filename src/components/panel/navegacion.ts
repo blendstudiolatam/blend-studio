@@ -73,7 +73,7 @@ export const MODULOS: Modulo[] = [
       { nombre: "Catálogo de paquetes", slug: "paquetes", fase: 1, listo: true },
       { nombre: "Tarjeta de fidelidad", slug: "fidelidad", fase: 3 },
       { nombre: "Tarjeta de regalo y cupones", slug: "regalos", fase: 3 },
-      { nombre: "Alerta de cumpleaños", slug: "cumpleanos", fase: 1 },
+      { nombre: "Alerta de cumpleaños", slug: "cumpleanos", fase: 1, listo: true },
     ],
   },
   {

@@ -3,10 +3,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { z } from "zod";
+import { Rendimiento } from "@/components/panel/rendimiento";
 import { Avatar } from "@/components/ui/avatar";
 import { ETIQUETA_ROL, type Rol } from "@/lib/auth/permisos";
 import { requireModulo } from "@/lib/auth/sesion";
 import { CLASE_ESTADO, ETIQUETA_ESTADO, urlFotoEmpleado, type EstadoEmpleado } from "@/lib/empleados";
+import { periodoValido } from "@/lib/periodos";
 import { createClient } from "@/lib/supabase/server";
 import { DatosEmpleadoForm } from "./datos-empleado";
 import { HorarioEmpleado } from "./horario-empleado";
@@ -24,7 +26,7 @@ const PESTANAS = [
 export default async function EmpleadoPage({ params, searchParams }: PageProps<"/panel/personal/empleados/[id]">) {
   const ctx = await requireModulo("personal");
   const { id } = await params;
-  const { tab } = await searchParams;
+  const { tab, periodo } = await searchParams;
   const empId = z.guid().safeParse(id);
   if (!empId.success) notFound();
   const pestana = PESTANAS.find((p) => p.id === tab)?.id ?? "datos";
@@ -99,13 +101,12 @@ export default async function EmpleadoPage({ params, searchParams }: PageProps<"
       {pestana === "horario" && <PestanaHorario id={e.id} editable={editable} />}
       {pestana === "servicios" && <PestanaServicios id={e.id} sucursalId={ctx.sucursal.id} editable={editable} comisionGeneral={Number(e.comision_pct)} />}
       {pestana === "rendimiento" && (
-        <div className="rounded-xl border border-dashed border-line bg-surface px-6 py-14 text-center">
-          <p className="text-[11px] uppercase tracking-[0.3em] text-gold-strong">Rendimiento</p>
-          <p className="mt-3 font-display text-2xl">Aquí verás citas atendidas, ventas y comisiones</p>
-          <p className="mx-auto mt-2 max-w-md text-sm text-muted">
-            Se llenará solo cuando la Agenda esté funcionando y haya servicios realizados.
-          </p>
-        </div>
+        <Rendimiento
+          sucursalId={ctx.sucursal.id}
+          empleadoId={e.id}
+          periodo={periodoValido(periodo)}
+          hrefPeriodo={(p) => `?tab=rendimiento&periodo=${p}`}
+        />
       )}
     </div>
   );
