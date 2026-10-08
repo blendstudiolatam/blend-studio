@@ -16,7 +16,8 @@
     "seed:servicios": "node --env-file-if-exists=.env.local scripts/seed-demo-servicios.mjs",
     "seed:tratamientos": "node --env-file-if-exists=.env.local scripts/seed-demo-tratamientos.mjs",
     "seed:usuarios": "node --env-file-if-exists=.env.local scripts/seed-demo-usuarios.mjs",
-    "test:rls": "node --env-file-if-exists=.env.local --test \"tests/rls/*.test.ts\""
+    "test:rls": "node --env-file-if-exists=.env.local --test \"tests/rls/*.test.ts\"",
+    "auditoria": "node --env-file-if-exists=.env.local scripts/auditoria-seguridad.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
